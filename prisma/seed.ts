@@ -1,39 +1,59 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+
+import { PrismaClient } from "@/generated/prisma";
+
 const prisma = new PrismaClient();
 
 async function main() {
+  const userExists = await prisma.user.findFirst();
+
+  if (userExists) {
+    console.log("Seed już został wykonany – użytkownicy istnieją. Pomijam...");
+    return;
+  }
+
   // USERS
   await prisma.user.createMany({
     data: [
       {
         email: "user1@example.com",
         password: "hashedpassword1",
+        mobileNumber: "123456789",
         username: "user1",
         role: "USER",
+        countryRegion: "Poland",
       },
       {
         email: "user2@example.com",
         password: "hashedpassword2",
+        mobileNumber: "123456789",
         username: "user2",
         role: "USER",
+        countryRegion: "Poland",
       },
       {
         email: "user3@example.com",
         password: "hashedpassword3",
+        mobileNumber: "123456789",
         username: "user3",
         role: "USER",
+        countryRegion: "Poland",
       },
       {
         email: "user4@example.com",
         password: "hashedpassword4",
+        mobileNumber: "123456789",
         username: "user4",
         role: "USER",
+        countryRegion: "Poland",
       },
       {
         email: "admin@example.com",
         password: "hashedadminpassword",
+        mobileNumber: "123456789",
         username: "admin",
         role: "ADMIN",
+        countryRegion: "Poland",
       },
     ],
     skipDuplicates: true,
@@ -46,12 +66,10 @@ async function main() {
     await prisma.address.create({
       data: {
         userId: user.id,
-        fullName: `User ${index + 1} Name`,
-        street: "123 Example St",
-        city: "Example City",
-        postalCode: "00-000",
+        city: "Warsaw",
         country: "Poland",
-        phoneNumber: "123456789",
+        postCode: "00-001",
+        province: `Mazovia - ${index}`,
       },
     });
   }
@@ -127,6 +145,7 @@ async function main() {
       const brand = allBrands[(productCount + i) % allBrands.length];
       await prisma.product.create({
         data: {
+          stock: 100,
           name: `${category.name} Product ${i}`,
           description: `Description for ${category.name} product ${i}.`,
           price: parseFloat((50 + i * 10).toFixed(2)),
