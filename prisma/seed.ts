@@ -1,5 +1,3 @@
-// import { PrismaClient } from "@prisma/client";
-
 import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
@@ -12,7 +10,6 @@ async function main() {
     return;
   }
 
-  // USERS
   await prisma.user.createMany({
     data: [
       {
@@ -61,7 +58,6 @@ async function main() {
 
   const users = await prisma.user.findMany();
 
-  // ADDRESSES FOR USERS
   for (const [index, user] of users.entries()) {
     await prisma.address.create({
       data: {
@@ -74,7 +70,6 @@ async function main() {
     });
   }
 
-  // CATEGORIES
   await prisma.category.createMany({
     data: [
       {
@@ -96,7 +91,6 @@ async function main() {
     ],
   });
 
-  // BRANDS
   await prisma.brand.createMany({
     data: [
       { name: "ROG", description: "Republic of Gamers hardware." },
@@ -122,7 +116,6 @@ async function main() {
     ],
   });
 
-  // COLORS
   await prisma.color.createMany({
     data: [
       { name: "Black", hash: "#000000" },
@@ -133,12 +126,10 @@ async function main() {
     ],
   });
 
-  // Fetch IDs for categories, brands, and colors
   const allCategories = await prisma.category.findMany();
   const allBrands = await prisma.brand.findMany();
   const allColors = await prisma.color.findMany();
 
-  // PRODUCTS – 5 per category with 2 color variants
   let productCount = 0;
   for (const category of allCategories) {
     for (let i = 1; i <= 5; i++) {
