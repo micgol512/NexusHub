@@ -9,7 +9,6 @@ export const GET = async () => {
         { description: { contains: "product" } },
       ],
     },
-
     orderBy: {
       name: "asc",
     },

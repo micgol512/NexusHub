@@ -14,8 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 // ========== ENUMS ==========
 
 enum Gender {
@@ -56,7 +54,7 @@ model User {
   profileImage String?
   username     String?
   birthDate    DateTime?
-  gender       Gender?  
+  gender       Gender?
 
   addresses      Address[]
   paymentMethods PaymentMethod[]
@@ -69,7 +67,6 @@ model User {
   cart           Cart?
   reviews        Review[]
   discussions    Discussion[]
-  replies        Reply[]
 }
 
 model Address {
@@ -218,25 +215,27 @@ model ReviewMedia {
 }
 
 model Discussion {
-  id        Int      @id @default(autoincrement())
-  product   Product  @relation(fields: [productId], references: [id])
-  productId Int
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  postDate  DateTime @default(now())
+  id        Int          @id @default(autoincrement())
   message   String
-  replies   Reply[]
+  product   Product      @relation(fields: [productId], references: [id])
+  productId Int
+  user      User         @relation(fields: [userId], references: [id])
+  userId    Int
+  parent    Discussion?  @relation("DiscussionReplies", fields: [parentId], references: [id])
+  parentId  Int?
+  postDate  DateTime     @default(now())
+  replies   Discussion[] @relation("DiscussionReplies")
 }
 
-model Reply {
-  id           Int        @id @default(autoincrement())
-  discussion   Discussion @relation(fields: [discussionId], references: [id])
-  discussionId Int
-  user         User       @relation(fields: [userId], references: [id])
-  userId       Int
-  postDate     DateTime   @default(now())
-  message      String
-}
+// model Reply {
+//   id           Int        @id @default(autoincrement())
+//   discussion   Discussion @relation(fields: [discussionId], references: [id])
+//   discussionId Int
+//   user         User       @relation(fields: [userId], references: [id])
+//   userId       Int
+//   postDate     DateTime   @default(now())
+//   message      String
+// }
 
 model Faq {
   id        Int     @id @default(autoincrement())

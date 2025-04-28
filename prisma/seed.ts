@@ -3,10 +3,10 @@ import { PrismaClient } from "@/generated/prisma";
 const prisma = new PrismaClient();
 
 async function main() {
-  const userExists = await prisma.user.findFirst();
+  const userProduct = await prisma.product.findFirst();
 
-  if (userExists) {
-    console.log("Seed już został wykonany – użytkownicy istnieją. Pomijam...");
+  if (userProduct) {
+    console.log("Some data already exists. Seeding skipped.");
     return;
   }
 
@@ -15,7 +15,7 @@ async function main() {
       {
         email: "user1@example.com",
         password: "hashedpassword1",
-        mobileNumber: "123456789",
+        mobileNumber: "111111111",
         username: "user1",
         role: "USER",
         countryRegion: "Poland",
@@ -23,7 +23,7 @@ async function main() {
       {
         email: "user2@example.com",
         password: "hashedpassword2",
-        mobileNumber: "123456789",
+        mobileNumber: "222222222",
         username: "user2",
         role: "USER",
         countryRegion: "Poland",
@@ -31,7 +31,7 @@ async function main() {
       {
         email: "user3@example.com",
         password: "hashedpassword3",
-        mobileNumber: "123456789",
+        mobileNumber: "333333333",
         username: "user3",
         role: "USER",
         countryRegion: "Poland",
@@ -39,7 +39,7 @@ async function main() {
       {
         email: "user4@example.com",
         password: "hashedpassword4",
-        mobileNumber: "123456789",
+        mobileNumber: "444444444",
         username: "user4",
         role: "USER",
         countryRegion: "Poland",
@@ -47,13 +47,12 @@ async function main() {
       {
         email: "admin@example.com",
         password: "hashedadminpassword",
-        mobileNumber: "123456789",
+        mobileNumber: "555555555",
         username: "admin",
         role: "ADMIN",
         countryRegion: "Poland",
       },
     ],
-    skipDuplicates: true,
   });
 
   const users = await prisma.user.findMany();
