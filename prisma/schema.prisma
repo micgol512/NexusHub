@@ -172,6 +172,7 @@ model Product {
   discountPrice Float?
   stock         Int
   sold          Int            @default(0)
+  createdAt     DateTime       @default(now())
 
   colors        Color[]      @relation("ProductColors")
   rating        RatingCount? @relation(fields: [ratingCountId], references: [id])

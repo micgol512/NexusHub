@@ -10,10 +10,11 @@
     "start": "next start",
     "lint": "next lint",
     "dev": "concurrently \"npm run db:up\" \"npm run dev:app\"",
+    "dev:app": "wait-on tcp:5432 && npm run db:migrate && next dev --turbopack",
+    "dev:app-seed": "wait-on tcp:5432 && npm run db:migrate-seed && next dev --turbopack",
     "db:up": "docker-compose up -d",
-    "dev:app": "wait-on tcp:5432 && npm run db:migrate-seed && next dev --turbopack",
-    "db:migrate-seed": "npm run db:migrate && npm run db:seed",
     "db:migrate": "prisma migrate dev --name init",
+    "db:migrate-seed": "npm run db:migrate && npm run db:seed",
     "db:seed": "prisma db seed"
   },
   "dependencies": {

@@ -2,7 +2,7 @@
 
 export default function Home() {
   const handleClick = async () => {
-    const data = await fetch("/api/check");
+    const data = await fetch("/api/product?limit=15");
     console.log(await data.json());
   };
   return (
