@@ -9,7 +9,7 @@ export default function Home() {
   };
   return (
     <div>
-      <Button variant={"ghost"} onClick={handleClick}>
+      <Button variant={"default"} onClick={handleClick}>
         SPRAWDZAM
       </Button>
     </div>
