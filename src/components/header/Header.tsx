@@ -1,14 +1,26 @@
-import { Button } from "../ui/button";
+"use client";
+
+// import { ThemeChanger } from "../shared/ThemeChanger";
+import { Separator } from "../ui/separator";
+import { SearchProduct } from "./SearchProduct";
+import { Logo } from "../shared/Logo";
+import UserLogin from "./UserLogin";
+import NavBar from "./NavBar";
 
 export const Header = () => {
   return (
-    <div className="flex flex-col text-nowrap justify-evenly  items-center p-10 pt-8 bg-[var(--background)] w-full  max-h-[224px] ">
-      <div className=" w-full max-w-[1920px]">
-        LOGO INPUT <Button variant={"destructive"}>SIGN IN</Button> albo dane
-        urzytkownika
+    <header className="flex text-nowrap justify-center items-center px-10 py-8 bg-(--background) w-full max-h-[224px]">
+      <div className="flex flex-col gap-[40px] w-full max-w-[1920px] ">
+        <div className="flex flex-row justify-between align-middle gap-4 m-0 p-0">
+          <Logo />
+          <SearchProduct />
+          <UserLogin />
+          {/* albo dane urzytkownika*/}
+          {/* <ThemeChanger /> */}
+        </div>
+        <NavBar />
+        <Separator />
       </div>
-      <div className="bg-cyan-800 w-full max-w-[1920px]">navigation</div>
-      <hr />
-    </div>
+    </header>
   );
 };

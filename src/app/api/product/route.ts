@@ -9,7 +9,7 @@ export const GET = async (request: Request) => {
   const minPrice = Number(searchParams.get("min")) || 0;
   const maxPrice = Number(searchParams.get("max")) || 10000;
   const sort = searchParams.get("sortBy") || "createdAt_desc";
-
+  const search = searchParams.get("search") || "";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "10", 10);
   const skip = (page - 1) * limit;
@@ -54,9 +54,12 @@ export const GET = async (request: Request) => {
       gte: minPrice,
       lte: maxPrice,
     },
+    name: {
+      contains: search,
+      mode: "insensitive" as const,
+    },
   };
   const prisma = new PrismaClient();
-  console.log(page);
 
   const [products, total] = await Promise.all([
     prisma.product.findMany({
@@ -86,6 +89,10 @@ export const GET = async (request: Request) => {
         price: {
           gte: minPrice,
           lte: maxPrice,
+        },
+        name: {
+          contains: search,
+          mode: "insensitive",
         },
       },
     }),
