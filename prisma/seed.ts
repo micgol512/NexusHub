@@ -73,19 +73,38 @@ async function main() {
     data: [
       {
         name: "Mouse",
-        description: "High-precision mice for gaming and productivity.",
+        description:
+          "Explore our diverse selection of electronic mice for sale, featuring cutting-edge technology, ergonomic designs, and unbeatable prices. Shop now!",
+        imageURL:
+          "https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png",
       },
       {
         name: "Headphone",
-        description: "Crystal-clear sound for music and calls.",
+        description:
+          "Immerse yourself in premium audio with our selection of high-quality headphones, offering crystal-clear sound, noise cancellation, and all-day comfort. Shop now!",
+        imageURL:
+          "https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png",
       },
       {
         name: "Keyboard",
-        description: "Mechanical and membrane keyboards for every use case.",
+        description:
+          "Discover our range of modern keyboards designed for every user - from gamers to professionals - featuring responsive keys, RGB lighting, and sleek ergonomics. Shop now!",
+        imageURL:
+          "https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png",
       },
       {
         name: "Monitor",
-        description: "High-resolution displays for work and play.",
+        description:
+          "Upgrade your viewing experience with our high-performance monitors, delivering stunning visuals, fast refresh rates, and eye-friendly technology. Shop now!",
+        imageURL:
+          "https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png",
+      },
+      {
+        name: "Webcam",
+        description:
+          "Stay connected in HD with our reliable webcams, perfect for video calls, streaming, and remote work - offering sharp image quality and plug-and-play setup. Shop now!",
+        imageURL:
+          "https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png",
       },
     ],
   });

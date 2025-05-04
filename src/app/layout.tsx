@@ -20,8 +20,8 @@ export default function RootLayout({
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <body className="min-h-screen flex flex-col bg-(--background) text-(--foreground) items-center justify-center gap-0">
           <Header />
-          <main className="w-full max-w-[1920px] flex flex-col flex-1 px-10 py-0">
-            <ScrollArea className="h-full bg-green-400">{children}</ScrollArea>
+          <main className="w-full max-w-[1920px] flex flex-col flex-1 px-10 py-0 ">
+            <ScrollArea className="h-full">{children}</ScrollArea>
           </main>
           <Footer />
         </body>

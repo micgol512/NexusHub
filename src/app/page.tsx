@@ -9,7 +9,7 @@ export default function HomePage() {
     console.log(await data.json());
   };
   return (
-    <div className="flex flex-col w-full h-full max-w-[1920px] bg-green-500">
+    <div className="flex flex-col w-full h-full gap-[100px] max-w-[1920px]">
       <CategorySlider />
       <Button variant={"default"} className="max-w-sm" onClick={handleClick}>
         SPRAWDZAM
