@@ -9,6 +9,8 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 import { usePathname, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 const PaginationPage = ({ totalPages }: { totalPages: number }) => {
   const pathname = usePathname();
@@ -49,6 +51,7 @@ const PaginationPage = ({ totalPages }: { totalPages: number }) => {
           <PaginationItem>
             <PaginationPrevious
               href={createPageURL(currentPage > 1 ? currentPage - 1 : 1)}
+              className={cn(buttonVariants({ variant: "ghost" }))}
             />
           </PaginationItem>
           <PaginationItem>

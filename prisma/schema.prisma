@@ -142,6 +142,7 @@ model Brand {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
+  imageURL    String?
   products    Product[]
 }
 
