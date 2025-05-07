@@ -8,6 +8,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export const metadata: Metadata = {
   title: "NexusHub",
   description: "Furutistic platform for customers and sellers",
+  icons: {
+    icon: "/favicon.ico", // lub .png
+  },
 };
 
 export default function RootLayout({

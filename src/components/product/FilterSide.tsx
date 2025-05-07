@@ -46,6 +46,7 @@ export default function FilterSide() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  //to zamienić na pobieranie wszystkich kategori i ocen za pomocą fetch() z backendu
   const categories = [
     "Mouse",
     "Headphone",

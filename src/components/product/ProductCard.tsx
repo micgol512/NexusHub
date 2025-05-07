@@ -17,7 +17,7 @@ export type FullProduct = Product & {
 const ProductCard = ({ product }: { product: FullProduct }) => {
   return (
     <Card
-      className="w-[300px] h-[400px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+      className="w-[300px] h-[400px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105"
       //   style={{
       //     backgroundColor: product.colors[0]?.hash || undefined,
       //   }}

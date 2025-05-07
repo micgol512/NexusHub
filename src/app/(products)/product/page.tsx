@@ -1,6 +1,7 @@
 // "use client";
 
-import ProductCard, { FullProduct } from "@/components/product/ProductCard";
+import { FullProduct } from "@/components/product/ProductCard";
+import ProductList from "@/components/product/ProductList";
 import PaginationPage from "@/components/shared/PaginationPage";
 
 type Props = {
@@ -40,21 +41,12 @@ export default async function ProductPage({ searchParams }: Props) {
   const { products, total, currentPage, totalPages } = data;
 
   return (
-    <section className="p-6">
-      {" "}
-      {/* Albo użycie grida by zawsze były 3 karty w wierszu */}
+    <section className="px-2">
       <h1 className="text-2xl font-bold mb-4">Produkty</h1>
       <p className="mb-4 text-sm text-gray-500">
         Znaleziono {total} produktów. Strona {currentPage} z {totalPages}
       </p>
-      {/* <ProductList/> 
-      i poniższy kod tam ma być wyświetlanie listy produktów więc moze tam 
-      przenieść całe fetchowanie danych??? albo tu przekazywać całą liste */}
-      <div className=" flex flex-row flex-wrap gap-4">
-        {products?.map((product: FullProduct) => (
-          <ProductCard key={`card-${product.id}`} product={product} />
-        ))}
-      </div>
+      <ProductList products={products} />
       <PaginationPage totalPages={totalPages} />
     </section>
   );
