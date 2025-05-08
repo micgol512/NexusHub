@@ -4,13 +4,11 @@ import { FullProduct } from "@/components/product/ProductCard";
 import ProductList from "@/components/product/ProductList";
 import PaginationPage from "@/components/shared/PaginationPage";
 
-type Props = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
-
-export default async function ProductPage({ searchParams }: Props) {
+export default async function ProductPage({
+  searchParams = {},
+}: {
+  searchParams?: { [key: string]: string | string[] };
+}) {
   const params = new URLSearchParams();
 
   for (const key in searchParams) {
@@ -23,7 +21,7 @@ export default async function ProductPage({ searchParams }: Props) {
   }
 
   const res = await fetch(
-    `http://localhost:3000/api/product?${params.toString()}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product?...`,
     {
       cache: "no-store",
     }
