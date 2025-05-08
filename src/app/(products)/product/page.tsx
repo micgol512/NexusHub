@@ -7,13 +7,13 @@ import PaginationPage from "@/components/shared/PaginationPage";
 export default async function ProductPage({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const resolvedSearchParams = await searchParams;
   const params = new URLSearchParams();
 
-  for (const key in resolvedSearchParams) {
-    const value = resolvedSearchParams[key];
+  // Pętla po parametrach URL
+  for (const key in searchParams) {
+    const value = searchParams[key];
     if (Array.isArray(value)) {
       value.forEach((v) => v && params.append(key, v));
     } else if (value !== undefined) {
@@ -31,6 +31,7 @@ export default async function ProductPage({
   if (!res.ok) {
     return <div>Wystąpił błąd ładowania produktów.</div>;
   }
+
   const data: {
     products: FullProduct[];
     total: number;

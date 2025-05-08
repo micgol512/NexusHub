@@ -6,7 +6,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "scripts": {
-    "build": "next build",
+    "build": "next build ",
     "start": "next start",
     "lint": "next lint",
     "dev": "concurrently \"npm run db:up\" \"npm run dev:app\"",
