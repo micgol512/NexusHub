@@ -4,7 +4,8 @@ import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
 import { ThemeProvider } from "next-themes";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata: Metadata = {
   title: "NexusHub",
   description: "Furutistic platform for customers and sellers",
@@ -29,6 +30,8 @@ export default function RootLayout({
           <Footer />
         </body>
       </ThemeProvider>
+      <Analytics />
+      <SpeedInsights />
     </html>
   );
 }

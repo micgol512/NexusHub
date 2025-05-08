@@ -47,6 +47,8 @@ export default function FilterSide() {
   const router = useRouter();
 
   //to zamienić na pobieranie wszystkich kategori i ocen za pomocą fetch() z backendu
+  // const categories = await fetch("/api/categories").then((res) => res.json());
+  // const ratings = await fetch("/api/ratings").then((res) => res.json());
   const categories = [
     "Mouse",
     "Headphone",
