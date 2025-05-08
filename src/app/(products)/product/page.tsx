@@ -5,14 +5,15 @@ import ProductList from "@/components/product/ProductList";
 import PaginationPage from "@/components/shared/PaginationPage";
 
 export default async function ProductPage({
-  searchParams = {},
+  searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const params = new URLSearchParams();
 
-  for (const key in searchParams) {
-    const value = searchParams[key];
+  for (const key in resolvedSearchParams) {
+    const value = resolvedSearchParams[key];
     if (Array.isArray(value)) {
       value.forEach((v) => v && params.append(key, v));
     } else if (value !== undefined) {
