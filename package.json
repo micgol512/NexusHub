@@ -15,7 +15,8 @@
     "db:up": "docker-compose up -d",
     "db:migrate": "prisma migrate dev --name init",
     "db:migrate-seed": "npm run db:migrate && npm run db:seed",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "app:online": "npm run db:migrate && next dev --turbopack"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
