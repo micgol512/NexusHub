@@ -10,12 +10,19 @@ interface Product {
   colors: { id: number; name: string }[];
 }
 
+// interface Params {
+//   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+// }
+// export default async function ProductPage(props: Params) {
+//   const searchParams = (await props.searchParams) ?? "";
+
 interface ProductPageProps {
-  params: { id: string };
+  id: Promise<{ id: string }>;
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const res = await fetch(`http://localhost:3000/api/product/${params.id}`, {
+export default async function ProductPage(props: ProductPageProps) {
+  const id = (await props.id) ?? "";
+  const res = await fetch(`http://localhost:3000/api/product/${id}`, {
     next: { revalidate: 60 },
   });
 
