@@ -45,4 +45,3 @@ prisma/migrations
 src/generated
 
 #my
-.eslintignore
