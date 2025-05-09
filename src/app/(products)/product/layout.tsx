@@ -13,10 +13,10 @@ export default function ProductLayout({
     <>
       <CategorySlider />
       <div className="flex border-t-2">
-        <ScrollArea className="max-h-[500px] w-[363px] p-10 border-r-2 ">
+        <ScrollArea className="max-h-full w-[363px] p-10 border-r-2 ">
           <aside>
             <FilterSide />
-          </aside>{" "}
+          </aside>
         </ScrollArea>
         <main className="flex-1 flex flex-col">
           <ProductFilterBar />

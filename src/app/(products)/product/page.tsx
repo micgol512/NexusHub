@@ -4,17 +4,16 @@ import { FullProduct } from "@/components/product/ProductCard";
 import ProductList from "@/components/product/ProductList";
 import PaginationPage from "@/components/shared/PaginationPage";
 
-export default async function ProductPage({
-  searchParams,
-}: {
+interface Params {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const resolvedSearchParams = await searchParams;
+}
+export default async function ProductPage(props: Params) {
+  const searchParams = await props.searchParams;
+
   const params = new URLSearchParams();
 
-  // Pętla po parametrach URL
-  for (const key in resolvedSearchParams) {
-    const value = resolvedSearchParams[key];
+  for (const key in searchParams) {
+    const value = searchParams[key];
     if (Array.isArray(value)) {
       value.forEach((v) => v && params.append(key, v));
     } else if (value !== undefined) {
@@ -23,7 +22,7 @@ export default async function ProductPage({
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product?...`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product?${params.toString()}`,
     {
       cache: "no-store",
     }

@@ -16,11 +16,10 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const res = await fetch(`http://localhost:3000/api/product/${params.id}`, {
-    next: { revalidate: 60 }, // Optional: ISR
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) {
-    // Można też użyć notFound() z "next/navigation" dla 404
     throw new Error("Failed to fetch product data");
   }
 
