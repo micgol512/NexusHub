@@ -8,7 +8,7 @@ interface Params {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 export default async function ProductPage(props: Params) {
-  const searchParams = await props.searchParams;
+  const searchParams = (await props.searchParams) ?? "";
 
   const params = new URLSearchParams();
 
