@@ -1,10 +1,10 @@
 import { PrismaClient } from "@/generated/prisma";
 
-export const GET = async (
-  _: Request,
-  { params }: { params: Promise<{ id: string }> }
-) => {
-  const productID = Number((await params).id);
+export const GET = async (req: Request) => {
+  const url = new URL(req.url);
+  const pathParts = url.pathname.split("/");
+  const idFromPath = pathParts[pathParts.length - 1];
+  const productID = Number(idFromPath);
   const prisma = new PrismaClient();
   const products = await prisma.product.findMany({
     where: { id: productID },

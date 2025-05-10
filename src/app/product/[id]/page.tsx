@@ -1,14 +1,16 @@
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  discountPrice?: number;
-  brand: { name: string };
-  category: { name: string };
-  images: { id: number; url: string }[];
-  colors: { id: number; name: string }[];
-}
+// interface Product {
+//   id: number;
+//   name: string;
+//   description: string;
+//   price: number;
+//   discountPrice?: number;
+//   brand: { name: string };
+//   category: { name: string };
+//   images: { id: number; url: string }[];
+//   colors: { id: number; name: string }[];
+// }
+
+import { FullProduct } from "@/components/product/ProductCard";
 
 // interface Params {
 //   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -16,12 +18,14 @@ interface Product {
 // export default async function ProductPage(props: Params) {
 //   const searchParams = (await props.searchParams) ?? "";
 
-interface ProductPageProps {
-  id: Promise<{ id: string }>;
-}
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const id = (await params).id;
 
-export default async function ProductPage(props: ProductPageProps) {
-  const id = (await props.id) ?? "";
+  if (id === undefined) return <div>Błąd</div>;
   const res = await fetch(`http://localhost:3000/api/product/${id}`, {
     next: { revalidate: 60 },
   });
@@ -31,7 +35,7 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   const data = await res.json();
-  const product: Product = data[0];
+  const product: FullProduct = data[0];
 
   return (
     <div className="p-6 space-y-4">
