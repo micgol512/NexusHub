@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@/generated/prisma";
+import { NextRequest } from "next/server";
 
-export const GET = async (request: Request) => {
+export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
 
   const categories = searchParams.getAll("category");

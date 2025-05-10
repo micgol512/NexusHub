@@ -1,7 +1,7 @@
 import { PrismaClient } from "@/generated/prisma";
 
 export const GET = async (
-  request: Request,
+  _: Request,
   { params }: { params: Promise<{ id: string }> }
 ) => {
   const productID = Number((await params).id);
