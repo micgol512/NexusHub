@@ -21,12 +21,9 @@ export default async function ProductPage(props: Params) {
     }
   }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product?${params.toString()}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`/api/product?${params.toString()}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     return <div>Wystąpił błąd ładowania produktów.</div>;

@@ -26,7 +26,7 @@ export default async function ProductPage({
   const id = (await params).id;
 
   if (id === undefined) return <div>Błąd</div>;
-  const res = await fetch(`http://localhost:3000/api/product/${id}`, {
+  const res = await fetch(`/api/product/${id}`, {
     next: { revalidate: 60 },
   });
 
