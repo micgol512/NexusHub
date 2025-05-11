@@ -1,0 +1,294 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== ENUMS ==========
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum CouponType {
+  CASHBACK
+  PERCENT_OFF
+  WAR_COUPON
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// ========== MODELS ==========
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  mobileNumber  String   @unique
+  password      String?
+  countryRegion String?
+  role          UserRole @default(USER)
+
+  profileImage String?
+  username     String?
+  birthDate    DateTime?
+  gender       Gender?
+
+  addresses      Address[]
+  paymentMethods PaymentMethod[]
+  transactions   Transaction[]
+  orders         Order[]
+  wishlist       WishlistItem[]
+  favourites     FavouriteItem[]
+  coupons        Coupon[]
+  cashback       Float           @default(0)
+  cart           Cart?
+  reviews        Review[]
+  discussions    Discussion[]
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  user     User    @relation(fields: [userId], references: [id])
+  userId   Int
+  country  String
+  province String
+  city     String
+  postCode String
+  orders   Order[]
+}
+
+model PaymentMethod {
+  id      Int     @id @default(autoincrement())
+  user    User    @relation(fields: [userId], references: [id])
+  userId  Int
+  method  String
+  details Json
+  orders  Order[]
+}
+
+model WishlistItem {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+model FavouriteItem {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+model Coupon {
+  id           Int        @id @default(autoincrement())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  expiredDate  DateTime
+  usedDate     DateTime?
+  type         CouponType
+  value        Float
+  requirements Float
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int      @unique
+  status    String
+  createdAt DateTime @default(now())
+}
+
+model RatingCount {
+  id        Int @id @default(autoincrement())
+  oneStar   Int @default(0)
+  twoStar   Int @default(0)
+  threeStar Int @default(0)
+  fourStar  Int @default(0)
+  fiveStar  Int @default(0)
+
+  product Product?
+  review  Review?
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  imageURL    String?
+  products    Product[]
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  imageURL    String?
+  products    Product[]
+}
+
+model Color {
+  id       Int       @id @default(autoincrement())
+  name     String
+  hash     String
+  products Product[] @relation("ProductColors")
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String
+  brand         Brand          @relation(fields: [brandId], references: [id])
+  brandId       Int
+  category      Category       @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+  images        ProductImage[]
+  price         Float
+  discountPrice Float?
+  stock         Int
+  sold          Int            @default(0)
+  createdAt     DateTime       @default(now())
+
+  colors        Color[]      @relation("ProductColors")
+  rating        RatingCount? @relation(fields: [ratingCountId], references: [id])
+  ratingCountId Int?         @unique
+
+  reviews        Review[]
+  discussions    Discussion[]
+  faqs           Faq[]
+  wishlistItems  WishlistItem[]
+  favouriteItems FavouriteItem[]
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+model Review {
+  id            Int           @id @default(autoincrement())
+  product       Product       @relation(fields: [productId], references: [id])
+  productId     Int
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int
+  postDate      DateTime      @default(now())
+  likes         Int           @default(0)
+  message       String
+  media         ReviewMedia[]
+  rating        RatingCount?  @relation(fields: [ratingCountId], references: [id])
+  ratingCountId Int?          @unique
+}
+
+model ReviewMedia {
+  id       Int    @id @default(autoincrement())
+  url      String
+  review   Review @relation(fields: [reviewId], references: [id])
+  reviewId Int
+}
+
+model Discussion {
+  id        Int          @id @default(autoincrement())
+  message   String
+  product   Product      @relation(fields: [productId], references: [id])
+  productId Int
+  user      User         @relation(fields: [userId], references: [id])
+  userId    Int
+  parent    Discussion?  @relation("DiscussionReplies", fields: [parentId], references: [id])
+  parentId  Int?
+  postDate  DateTime     @default(now())
+  replies   Discussion[] @relation("DiscussionReplies")
+}
+
+// model Reply {
+//   id           Int        @id @default(autoincrement())
+//   discussion   Discussion @relation(fields: [discussionId], references: [id])
+//   discussionId Int
+//   user         User       @relation(fields: [userId], references: [id])
+//   userId       Int
+//   postDate     DateTime   @default(now())
+//   message      String
+// }
+
+model Faq {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  question  String
+  answer    String
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int        @unique
+  items     CartItem[]
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  selected  Boolean @default(true)
+  note      String?
+}
+
+model Order {
+  id                Int            @id @default(autoincrement())
+  user              User           @relation(fields: [userId], references: [id])
+  userId            Int
+  orderItems        OrderItem[]
+  createdAt         DateTime       @default(now())
+  status            OrderStatus    @default(PENDING)
+  totalPrice        Float
+  paymentMethod     PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId   Int?
+  shippingAddress   Address?       @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId Int?
+  transaction       Transaction?
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  order       Order   @relation(fields: [orderId], references: [id])
+  orderId     Int
+  product     Product @relation(fields: [productId], references: [id])
+  productId   Int
+  quantity    Int
+  priceAtTime Float
+  note        String?
+}
