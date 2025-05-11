@@ -22,7 +22,6 @@ export default function ProductLayout({
         </ScrollArea>
         <main className="flex-1 flex flex-col">
           <Suspense>
-            {" "}
             <ProductFilterBar />
           </Suspense>
           <div className="flex-1 py-6">{children}</div>
