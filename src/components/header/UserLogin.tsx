@@ -1,10 +1,18 @@
-import { Button } from "../ui/button";
+import Link from "next/link";
+import { buttonVariants } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 export const UserLogin = () => {
   return (
-    <Button variant={"destructive"} className="w-[121px] h-[53px]">
-      SIGN IN
-    </Button>
+    <Link
+      href={`/login`}
+      className={cn(
+        buttonVariants({ variant: "default" }),
+        "h-[54px] w-[121px]"
+      )}
+    >
+      SING IN
+    </Link>
   );
 };
 

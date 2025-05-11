@@ -7,7 +7,7 @@
     "clear": "tsx prisma/clear.ts"
   },
   "scripts": {
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "dev": "next dev --turbopack",
