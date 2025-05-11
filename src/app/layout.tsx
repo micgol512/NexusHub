@@ -6,6 +6,8 @@ import { ThemeProvider } from "next-themes";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SessionProvider } from "@/components/context/SessionProvider";
+
 export const metadata: Metadata = {
   title: "NexusHub",
   description: "Furutistic platform for customers and sellers",
@@ -23,11 +25,13 @@ export default function RootLayout({
     <html lang="en">
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <body className="min-h-screen flex flex-col bg-(--background) text-(--foreground) items-center justify-center gap-0">
-          <Header />
-          <main className="w-full max-w-[1920px] flex flex-col flex-1 px-10 py-0 ">
-            <ScrollArea className="h-full">{children}</ScrollArea>
-          </main>
-          <Footer />
+          <SessionProvider>
+            <Header />
+            <main className="w-full max-w-[1920px] flex flex-col flex-1 px-10 py-0 ">
+              <ScrollArea className="h-full">{children}</ScrollArea>
+            </main>
+            <Footer />
+          </SessionProvider>
         </body>
       </ThemeProvider>
       <Analytics />

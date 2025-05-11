@@ -3,12 +3,15 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import { Logo } from "../shared/Logo";
+import { Separator } from "../ui/separator";
+import { Input } from "../ui/input";
 
 const formSchema = z.object({
   contact: z
@@ -52,19 +55,14 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-muted px-4">
-      <Card className="w-full max-w-md p-8 space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">
-            <span className="text-orange-500">Nexus</span>Hub
-          </h1>
-        </div>
-
+    <div className="flex flex-col justify-start items-center min-h-screen bg-muted px-4">
+      <Logo />
+      <Card className="w-full max-w-md p-[24px]">
         <h2 className="text-xl font-semibold">Sign in</h2>
-        <hr />
+        <Separator />
 
         {formError && (
-          <p className="text-sm text-center text-red-500">{formError}</p>
+          <p className="text-sm text-center text-(--error)">{formError}</p>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -78,11 +76,11 @@ export default function LoginForm() {
               {...register("contact")}
               placeholder="Email or Mobile phone Number"
               className={`w-full p-2 border rounded mt-1 ${
-                errors.contact ? "border-red-500" : "border-gray-300"
+                errors.contact ? "border-(--error)" : "border-gray-300"
               }`}
             />
             {errors.contact && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-(--error) mt-1">
                 {errors.contact.message}
               </p>
             )}
@@ -92,13 +90,13 @@ export default function LoginForm() {
             <label htmlFor="password" className="block text-sm font-medium">
               Password
             </label>
-            <input
+            <Input
               id="password"
               type={showPassword ? "text" : "password"}
               {...register("password")}
               placeholder="Password"
               className={`w-full p-2 border rounded mt-1 pr-10 ${
-                errors.password ? "border-red-500" : "border-gray-300"
+                errors.password ? "border-(--error)" : "border-(--border)"
               }`}
             />
             <button
@@ -106,10 +104,10 @@ export default function LoginForm() {
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-2 top-[38px] text-gray-500"
             >
-              <Eye size={18} />
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
             {errors.password && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-(--error) mt-1">
                 {errors.password.message}
               </p>
             )}
@@ -140,7 +138,7 @@ export default function LoginForm() {
 
         <p className="text-center text-sm">
           Don’t have an account?{" "}
-          <a href="/register" className="text-orange-500 hover:underline">
+          <a href="/register" className="text-(--primary) hover:underline">
             Register
           </a>
         </p>
@@ -151,10 +149,28 @@ export default function LoginForm() {
 
         <div className="flex justify-center gap-3">
           <button
+            onClick={() => signIn("github", { callbackUrl })}
+            className="bg-white p-2 border rounded shadow hover:bg-gray-100"
+          >
+            <Image
+              src="/github-icon.svg"
+              alt="Github"
+              className="w-6 h-6"
+              width={24}
+              height={24}
+            />
+          </button>
+          <button
             onClick={() => signIn("google", { callbackUrl })}
             className="bg-white p-2 border rounded shadow hover:bg-gray-100"
           >
-            <Image src="/google-icon.svg" alt="Google" className="w-6 h-6" />
+            <Image
+              src="/google-icon.svg"
+              alt="Google"
+              className="w-6 h-6"
+              width={24}
+              height={24}
+            />
           </button>
           <button
             onClick={() => signIn("facebook", { callbackUrl })}
@@ -164,13 +180,21 @@ export default function LoginForm() {
               src="/facebook-icon.svg"
               alt="Facebook"
               className="w-6 h-6"
+              width={24}
+              height={24}
             />
           </button>
           <button
             onClick={() => signIn("apple", { callbackUrl })}
             className="bg-white p-2 border rounded shadow hover:bg-gray-100"
           >
-            <Image src="/apple-icon.svg" alt="Apple" className="w-6 h-6" />
+            <Image
+              src="/apple-icon.svg"
+              alt="Apple"
+              className="w-6 h-6"
+              width={24}
+              height={24}
+            />
           </button>
         </div>
       </Card>

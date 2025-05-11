@@ -57,19 +57,22 @@ export const authOptions: NextAuthOptions = {
       id: "database-login",
       name: "Database Login",
       credentials: {
-        login: {
-          label: "Email or Mobile",
+        contact: {
+          label: "Email or mobile phone number",
           type: "text",
-          placeholder: "example@email.com or 123456789",
+          placeholder: "Email or mobile phone number",
         },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.login || !credentials?.password) return null;
+        console.log("Dane z formularza:", credentials);
+
+        if (!credentials?.contact || !credentials?.password) return null;
 
         try {
-          const login = credentials.login.trim();
-          const user = await getUserByEmailOrPhone(login);
+          const contact = credentials.contact.trim();
+          const user = await getUserByEmailOrPhone(contact);
+          console.log("Urzytkownik z bazy: ", user);
           if (!user || typeof user.password !== "string") return null;
 
           const passwordValid = await verifyPassword(

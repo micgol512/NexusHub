@@ -9,7 +9,18 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    remotePatterns: [new URL("https://i.ibb.co/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        pathname: "/**", // opcjonalnie, jeśli chcesz ograniczyć ścieżki
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "/**", // opcjonalnie, jeśli chcesz ograniczyć ścieżki
+      },
+    ],
   },
 };
 
