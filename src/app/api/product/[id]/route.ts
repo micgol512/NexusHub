@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const GET = async (request: Request) => {
   const url = new URL(request.url);
@@ -6,7 +6,6 @@ export const GET = async (request: Request) => {
   const idFromPath = pathParts[pathParts.length - 1];
   const productID = Number(idFromPath);
 
-  const prisma = new PrismaClient();
   const products = await prisma.product.findMany({
     where: { id: productID },
     include: {

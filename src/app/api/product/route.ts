@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient } from "@/generated/prisma";
+import { Prisma } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
 export const GET = async (request: NextRequest) => {
@@ -60,7 +61,6 @@ export const GET = async (request: NextRequest) => {
       mode: "insensitive" as const,
     },
   };
-  const prisma = new PrismaClient();
 
   const [products, total] = await Promise.all([
     prisma.product.findMany({

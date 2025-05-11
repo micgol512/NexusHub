@@ -93,7 +93,7 @@ export const CategorySlider = () => {
               </CardContent>
               <CardContent className="flex flex-col h-full w-1/2 gap-4 p-0 m-0 items-center justify-center">
                 <Image
-                  src="https://i.ibb.co/5WYyQd5p/ad1a62b3939f5147fb9c66c5e3d3c48daac93746.png"
+                  src={categories[activeIndex].imageURL || "placeholder"}
                   alt="Category"
                   className="object-contain scale-130 -rotate-[35deg]"
                   width={300}
