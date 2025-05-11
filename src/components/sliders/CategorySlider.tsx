@@ -27,12 +27,9 @@ export const CategorySlider = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/category`,
-        {
-          cache: "no-store",
-        }
-      );
+      const res = await fetch(`/api/category`, {
+        cache: "no-store",
+      });
       const { categories } = await res.json();
       setCategories(categories);
     };
