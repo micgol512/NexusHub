@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "NexusHub",
   description: "Furutistic platform for customers and sellers",
   icons: {
-    icon: "/favicon.ico", // lub .png
+    icon: "/favicon.ico",
   },
 };
 

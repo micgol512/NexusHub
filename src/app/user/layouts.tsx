@@ -9,26 +9,6 @@ export default function ProductLayout({
     <div className="flex flex-col ">
       <ScrollArea className="h-[300px] bg-blue-400">
         some content for filter
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
       </ScrollArea>
       {children}
     </div>
