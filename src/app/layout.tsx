@@ -32,10 +32,10 @@ export default function RootLayout({
             </main>
             <Footer />
           </SessionProvider>
+          <Analytics />
+          <SpeedInsights />
         </body>
       </ThemeProvider>
-      <Analytics />
-      <SpeedInsights />
     </html>
   );
 }
