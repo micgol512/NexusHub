@@ -26,9 +26,12 @@ export default async function ProductPage({
   const id = (await params).id;
 
   if (id === undefined) return <div>Błąd</div>;
-  const res = await fetch(`/api/product/${id}`, {
-    next: { revalidate: 60 },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${id}`,
+    {
+      next: { revalidate: 60 },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch product data");
