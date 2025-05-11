@@ -7,11 +7,11 @@
     "clear": "tsx prisma/clear.ts"
   },
   "scripts": {
-    "build": "next build ",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "dev1": "next dev --turbopack",
-    "dev": "concurrently \"npm run db:up\" \"npm run dev:app\"",
+    "dev": "next dev --turbopack",
+    "dev:local": "concurrently \"npm run db:up\" \"npm run dev:app\"",
     "dev:app": "wait-on tcp:5432 && npm run db:migrate && next dev --turbopack",
     "dev:app-seed": "wait-on tcp:5432 && npm run db:migrate-seed && next dev --turbopack",
     "db:up": "docker-compose up -d",
