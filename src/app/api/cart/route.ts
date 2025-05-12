@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
-  // Sprawdź, czy produkt istnieje
   const product = await prisma.product.findUnique({
     where: { id: productId },
   });
@@ -44,7 +43,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
 
-  // Zapewnij, że koszyk istnieje
   const cart = await prisma.cart.upsert({
     where: { userId: session.user.id },
     update: {},
@@ -53,7 +51,6 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Sprawdź, czy produkt już jest w koszyku
   const existingCartItem = await prisma.cartItem.findFirst({
     where: {
       cartId: cart.id,
@@ -70,7 +67,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ item: updatedItem });
   }
 
-  // Dodaj nowy produkt do koszyka
   const newItem = await prisma.cartItem.create({
     data: {
       cartId: cart.id,
@@ -113,4 +109,60 @@ export async function DELETE(req: NextRequest) {
   });
 
   return NextResponse.json({ deletedCount: deletedItem.count });
+}
+
+export async function PATCH(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body: { productId: number; quantity?: number; selected?: boolean } =
+    await req.json();
+  const { productId, quantity, selected } = body;
+
+  if (!productId || (quantity !== undefined && quantity < 1)) {
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { cart: true },
+    });
+
+    if (!user?.cart) {
+      return NextResponse.json({ error: "Cart not found" }, { status: 404 });
+    }
+
+    const cartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId: user.cart.id,
+        productId,
+      },
+    });
+
+    if (!cartItem) {
+      return NextResponse.json(
+        { error: "Item not found in cart" },
+        { status: 404 }
+      );
+    }
+
+    const updatedItem = await prisma.cartItem.update({
+      where: { id: cartItem.id },
+      data: {
+        quantity: quantity ?? cartItem.quantity,
+        selected: selected ?? cartItem.selected,
+      },
+    });
+
+    return NextResponse.json({ updatedItem });
+  } catch (error) {
+    console.error("[CART_PATCH_ERROR]", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

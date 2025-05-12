@@ -156,19 +156,20 @@ export default function LoginForm() {
         </div>
 
         <div className="flex justify-center gap-3 mt-2">
-          <button
+          <Button
             onClick={() => signIn("github", { callbackUrl })}
-            className="bg-white p-2 border rounded shadow hover:bg-gray-100"
+            variant={"outline"}
+            className="h-min w-min p-2"
           >
             <Image src="/github-icon.svg" alt="Github" width={24} height={24} />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => signIn("google", { callbackUrl })}
             className="bg-white p-2 border rounded shadow hover:bg-gray-100"
           >
             <Image src="/google-icon.svg" alt="Google" width={24} height={24} />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => signIn("facebook", { callbackUrl })}
             className="bg-white p-2 border rounded shadow hover:bg-gray-100"
           >
@@ -178,13 +179,13 @@ export default function LoginForm() {
               width={24}
               height={24}
             />
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => signIn("apple", { callbackUrl })}
             className="bg-white p-2 border rounded shadow hover:bg-gray-100"
           >
             <Image src="/apple-icon.svg" alt="Apple" width={24} height={24} />
-          </button>
+          </Button>
         </div>
       </Card>
     </div>

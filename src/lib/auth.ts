@@ -7,28 +7,30 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "@/generated/prisma";
 import { verifyPassword } from "@/lib/hashPassword";
 import { getUserByEmailOrPhone } from "@/lib/db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "./prisma";
 
 declare module "next-auth" {
   interface Session {
     user: {
-      id: number;
+      id: string;
       email: string;
-      profileImage: string | null;
-      username: string | null;
+      image: string | null;
+      name: string | null;
     };
   }
 
   interface User {
-    id: number;
+    id: string;
     email: string;
-    profileImage: string | null;
-    username: string | null;
+    image: string | null;
+    name: string | null;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id?: number;
+    id?: string;
     email?: string;
     name?: string;
     picture?: string;
@@ -36,6 +38,7 @@ declare module "next-auth/jwt" {
 }
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -84,8 +87,8 @@ export const authOptions: NextAuthOptions = {
           return {
             id: user.id,
             email: user.email,
-            profileImage: user.profileImage,
-            username: user.username,
+            image: user.image,
+            name: user.name,
           } as User;
         } catch (error) {
           console.error("Error during authorization:", error);
@@ -101,19 +104,19 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id as number;
+        token.id = String(user.id);
         token.email = user.email;
-        token.name = user.username ?? "";
+        token.name = user.name ?? "";
         token.picture = user.image ?? "";
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id ?? 0;
+        session.user.id = String(token.id ?? "");
         session.user.email = token.email ?? "";
-        session.user.username = token.name ?? "";
-        session.user.profileImage = token.picture ?? "";
+        session.user.name = token.name ?? "";
+        session.user.image = token.picture ?? "";
       }
       return session;
     },

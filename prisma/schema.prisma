@@ -44,17 +44,17 @@ enum UserRole {
 // ========== MODELS ==========
 
 model User {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(cuid())
   email         String   @unique
   mobileNumber  String   @unique
   password      String?
   countryRegion String?
   role          UserRole @default(USER)
 
-  profileImage String?
-  username     String?
-  birthDate    DateTime?
-  gender       Gender?
+  image     String?
+  name      String?
+  birthDate DateTime?
+  gender    Gender?
 
   addresses      Address[]
   paymentMethods PaymentMethod[]
@@ -67,12 +67,17 @@ model User {
   cart           Cart?
   reviews        Review[]
   discussions    Discussion[]
+
+  emailVerified DateTime?
+
+  accounts Account[]
+  sessions Session[]
 }
 
 model Address {
   id       Int     @id @default(autoincrement())
   user     User    @relation(fields: [userId], references: [id])
-  userId   Int
+  userId   String
   country  String
   province String
   city     String
@@ -83,7 +88,7 @@ model Address {
 model PaymentMethod {
   id      Int     @id @default(autoincrement())
   user    User    @relation(fields: [userId], references: [id])
-  userId  Int
+  userId  String
   method  String
   details Json
   orders  Order[]
@@ -92,7 +97,7 @@ model PaymentMethod {
 model WishlistItem {
   id        Int     @id @default(autoincrement())
   user      User    @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   product   Product @relation(fields: [productId], references: [id])
   productId Int
 }
@@ -100,7 +105,7 @@ model WishlistItem {
 model FavouriteItem {
   id        Int     @id @default(autoincrement())
   user      User    @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   product   Product @relation(fields: [productId], references: [id])
   productId Int
 }
@@ -108,7 +113,7 @@ model FavouriteItem {
 model Coupon {
   id           Int        @id @default(autoincrement())
   user         User       @relation(fields: [userId], references: [id])
-  userId       Int
+  userId       String
   expiredDate  DateTime
   usedDate     DateTime?
   type         CouponType
@@ -119,7 +124,7 @@ model Coupon {
 model Transaction {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   order     Order    @relation(fields: [orderId], references: [id])
   orderId   Int      @unique
   status    String
@@ -201,7 +206,7 @@ model Review {
   product       Product       @relation(fields: [productId], references: [id])
   productId     Int
   user          User          @relation(fields: [userId], references: [id])
-  userId        Int
+  userId        String
   postDate      DateTime      @default(now())
   likes         Int           @default(0)
   message       String
@@ -223,7 +228,7 @@ model Discussion {
   product   Product      @relation(fields: [productId], references: [id])
   productId Int
   user      User         @relation(fields: [userId], references: [id])
-  userId    Int
+  userId    String
   parent    Discussion?  @relation("DiscussionReplies", fields: [parentId], references: [id])
   parentId  Int?
   postDate  DateTime     @default(now())
@@ -251,7 +256,7 @@ model Faq {
 model Cart {
   id        Int        @id @default(autoincrement())
   user      User       @relation(fields: [userId], references: [id])
-  userId    Int        @unique
+  userId    String     @unique
   items     CartItem[]
   updatedAt DateTime   @updatedAt
 }
@@ -270,7 +275,7 @@ model CartItem {
 model Order {
   id                Int            @id @default(autoincrement())
   user              User           @relation(fields: [userId], references: [id])
-  userId            Int
+  userId            String
   orderItems        OrderItem[]
   createdAt         DateTime       @default(now())
   status            OrderStatus    @default(PENDING)
@@ -291,4 +296,40 @@ model OrderItem {
   quantity    Int
   priceAtTime Float
   note        String?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }

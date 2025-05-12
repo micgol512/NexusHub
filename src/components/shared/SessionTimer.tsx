@@ -2,10 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SessionTimer() {
   const { data: session, status } = useSession();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!session || !session.expires) return;
@@ -19,13 +21,14 @@ export default function SessionTimer() {
       if (diff <= 0) {
         clearInterval(interval);
         setTimeLeft(0);
+        router.push("/");
       } else {
         setTimeLeft(diff);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [session]);
+  }, [session, router]);
 
   if (status === "loading") return <p>Sprawdzanie sesji...</p>;
   if (status === "unauthenticated") return <p>Użytkownik niezalogowany.</p>;
