@@ -10,11 +10,15 @@ export async function GET() {
   }
 
   const cart = await prisma.cart.findUnique({
-    where: { userId: session.user.id },
+    where: { userId: session?.user?.id },
     include: {
       items: {
         include: {
-          product: true,
+          product: {
+            include: {
+              images: true,
+            },
+          },
         },
       },
     },

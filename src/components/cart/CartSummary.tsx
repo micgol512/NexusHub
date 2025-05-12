@@ -10,7 +10,7 @@ export default function CartSummary({
       <div>
         <div className="text-sm text-gray-500">Total Product</div>
         <div className="flex justify-between font-medium">
-          <span>Total Product Price ({totalItems} Item)</span>
+          <span>Total Products in cart: ({totalItems})</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
       </div>

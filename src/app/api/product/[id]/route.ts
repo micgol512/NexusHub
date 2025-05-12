@@ -13,7 +13,7 @@ export const GET = async (request: Request) => {
         include: {
           user: {
             select: {
-              username: true,
+              name: true,
             },
           },
         },
@@ -29,7 +29,7 @@ export const GET = async (request: Request) => {
         include: {
           user: {
             select: {
-              username: true,
+              name: true,
             },
           },
         },
