@@ -65,14 +65,14 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("Dane z formularza:", credentials);
+        // console.log("Dane z formularza:", credentials);
 
         if (!credentials?.contact || !credentials?.password) return null;
 
         try {
           const contact = credentials.contact.trim();
           const user = await getUserByEmailOrPhone(contact);
-          console.log("Urzytkownik z bazy: ", user);
+          //   console.log("Urzytkownik z bazy: ", user);
           if (!user || typeof user.password !== "string") return null;
 
           const passwordValid = await verifyPassword(
@@ -117,5 +117,9 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 10,
   },
 };

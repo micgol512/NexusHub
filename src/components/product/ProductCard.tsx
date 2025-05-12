@@ -11,7 +11,9 @@ import { Card, CardContent } from "../ui/card";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
+import { Separator } from "@radix-ui/react-separator";
+import { Button } from "../ui/button";
 
 export type FullProduct = Product & {
   category: Category;
@@ -26,10 +28,29 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
   const handleClick = (id: string) => {
     router.push(`/product/${id}`);
   };
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        body: JSON.stringify({ productId, quantity: 1 }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to add to Cart");
+      }
+
+      console.log("Add to cart!");
+    } catch (error) {
+      console.error("Error with adding to cart:", error);
+    }
+  };
 
   return (
     <Card
-      className=" relative w-[300px] h-[400px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105"
+      className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105"
       onClick={() => handleClick(product.id.toString())}
       //   style={{
       //     backgroundColor: product.colors[0]?.hash || undefined,
@@ -39,7 +60,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         {product.name} ({product.brand.name})
         {product.discountPrice && `(${product.discountPrice})`}
       </CardTitle> */}
-      <CardContent className="flex flex-col gap-[18px]">
+      <CardContent className="relative flex flex-col gap-[18px]">
         <Image
           src={`${product.images[0].url}`}
           width={100}
@@ -62,10 +83,30 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
             {product.price}
           </p>
         </div>
-        <div>
+        <div className="flex flex-row ">
           <Star color="var(--primary)" fill="var(--primary)" />{" "}
-          <p>{product.rating.fiveStar}</p>
+          <p>
+            {product.rating?.fiveStar ? "Są oceny i obliczenia" : "(5)"}
+            {"/5.0"}
+          </p>
+          <Separator orientation="vertical" className="my-2" />
+          <p>
+            {product.sold}
+            {" sold"}
+          </p>
         </div>
+        <div>ProgresBar</div>
+        <div>info sztuk sprzedanych z ilości</div>
+        <Button
+          variant={"ghost"}
+          className="absolute left-[10px] top-[10px]"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddToCart(product.id);
+          }}
+        >
+          <ShoppingCart size={48} />
+        </Button>
       </CardContent>
     </Card>
   );

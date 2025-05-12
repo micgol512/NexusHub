@@ -41,7 +41,7 @@ export default async function ProductPage({
   const product: FullProduct = data[0];
 
   return (
-    <div className="p-6 space-y-4">
+    <main className="p-6 space-y-4">
       <h1 className="text-3xl font-semibold">{product.name}</h1>
       <p className="text-muted-foreground">{product.description}</p>
       <div>
@@ -73,6 +73,6 @@ export default async function ProductPage({
           </span>
         ))}
       </div>
-    </div>
+    </main>
   );
 }
