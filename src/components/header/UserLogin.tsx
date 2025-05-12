@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { ShoppingCart } from "lucide-react";
-import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const UserLogin = () => {
   const { data: session, status } = useSession();
@@ -24,7 +24,7 @@ export const UserLogin = () => {
       </Button>
     );
 
-  const userImage = session.user?.profileImage ?? "/default-avatar.png";
+  const userImage = session.user?.image ?? "";
 
   return (
     <div className="flex items-center gap-4">
@@ -32,13 +32,10 @@ export const UserLogin = () => {
         <ShoppingCart className="w-6 h-6" />
       </Link>
       <Link href="/user">
-        <Image
-          src={userImage}
-          alt="User avatar"
-          width={36}
-          height={36}
-          className="rounded-full object-cover"
-        />
+        <Avatar>
+          <AvatarImage src={userImage} />
+          <AvatarFallback>{"NN"}</AvatarFallback>
+        </Avatar>
       </Link>
     </div>
   );
