@@ -70,6 +70,8 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --error: #ef4444;
   --success: #16a34a;
+  --category-bg: #fff0e7;
+  --category-fg: #943518;
 }
 
 .dark {

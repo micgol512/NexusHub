@@ -1,7 +1,6 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const GET = async () => {
-  const prisma = new PrismaClient();
   const [categories, total] = await Promise.all([
     prisma.category.findMany({
       orderBy: {
