@@ -26,9 +26,12 @@ export default async function ProductPage({
   const id = (await params).id;
 
   if (id === undefined) return <div>Błąd</div>;
-  const res = await fetch(`http://localhost:3000/api/product/${id}`, {
-    next: { revalidate: 60 },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${id}`,
+    {
+      next: { revalidate: 60 },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch product data");
@@ -38,7 +41,7 @@ export default async function ProductPage({
   const product: FullProduct = data[0];
 
   return (
-    <div className="p-6 space-y-4">
+    <main className="p-6 space-y-4">
       <h1 className="text-3xl font-semibold">{product.name}</h1>
       <p className="text-muted-foreground">{product.description}</p>
       <div>
@@ -70,6 +73,6 @@ export default async function ProductPage({
           </span>
         ))}
       </div>
-    </div>
+    </main>
   );
 }

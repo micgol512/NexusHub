@@ -73,6 +73,7 @@ export const GET = async (request: NextRequest) => {
         brand: true,
         category: true,
         colors: true,
+        rating: true,
       },
     }),
 
