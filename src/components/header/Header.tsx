@@ -1,11 +1,11 @@
 "use client";
 
-// import { ThemeChanger } from "../shared/ThemeChanger";
 import { Separator } from "../ui/separator";
 import { SearchProduct } from "./SearchProduct";
 import { Logo } from "../shared/Logo";
 import UserLogin from "./UserLogin";
 import NavBar from "./NavBar";
+import PathShow from "../shared/PathShow";
 
 export const Header = () => {
   return (
@@ -15,11 +15,10 @@ export const Header = () => {
           <Logo />
           <SearchProduct />
           <UserLogin />
-          {/* albo dane urzytkownika*/}
-          {/* <ThemeChanger /> */}
         </div>
         <NavBar />
         <Separator />
+        <PathShow />
       </div>
     </header>
   );

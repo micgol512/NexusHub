@@ -1,16 +1,5 @@
-// import { Button } from "../ui/button";
-
 import { Logo } from "../shared/Logo";
 import PayMethod from "./PayMethod";
-
-// export const Fotter = () => {
-//   return (
-//     <div className="flex justify-between items-center p-4 bg-gray-200 h-[494px]">
-//       Some Fotter
-//       <Button>SomeButton</Button>
-//     </div>
-//   );
-// };
 
 export const Footer = () => {
   return (

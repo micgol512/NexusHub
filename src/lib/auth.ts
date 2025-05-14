@@ -4,7 +4,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import AppleProvider from "next-auth/providers/apple";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { User } from "@/generated/prisma";
+
 import { verifyPassword } from "@/lib/hashPassword";
 import { getUserByEmailOrPhone } from "@/lib/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -43,6 +43,7 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
+      authorization: { params: { scope: "read:user user:email" } },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID!,
@@ -68,14 +69,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // console.log("Dane z formularza:", credentials);
-
         if (!credentials?.contact || !credentials?.password) return null;
 
         try {
           const contact = credentials.contact.trim();
           const user = await getUserByEmailOrPhone(contact);
-          //   console.log("Urzytkownik z bazy: ", user);
           if (!user || typeof user.password !== "string") return null;
 
           const passwordValid = await verifyPassword(
@@ -86,10 +84,10 @@ export const authOptions: NextAuthOptions = {
 
           return {
             id: user.id,
-            email: user.email,
-            image: user.image,
-            name: user.name,
-          } as User;
+            email: user.email ?? "",
+            image: user.image ?? "",
+            name: user.name ?? "",
+          };
         } catch (error) {
           console.error("Error during authorization:", error);
           return null;

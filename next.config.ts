@@ -13,12 +13,17 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i.ibb.co",
-        pathname: "/**", // opcjonalnie, jeśli chcesz ograniczyć ścieżki
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
-        pathname: "/**", // opcjonalnie, jeśli chcesz ograniczyć ścieżki
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "sora.chatgpt.com",
+        pathname: "/**",
       },
     ],
   },

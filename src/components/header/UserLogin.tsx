@@ -34,7 +34,7 @@ export const UserLogin = () => {
       <Link href="/user">
         <Avatar>
           <AvatarImage src={userImage} />
-          <AvatarFallback>{"NN"}</AvatarFallback>
+          <AvatarFallback>Name</AvatarFallback>
         </Avatar>
       </Link>
     </div>

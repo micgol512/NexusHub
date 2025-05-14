@@ -37,7 +37,9 @@ export default function SessionTimer() {
     <div className="text-sm text-(--foreground)">
       {timeLeft !== null ? (
         <p>
-          Zalogowano jako: <strong>{session?.user.email}</strong>
+          Zalogowano jako: <strong>{session?.user?.email ?? "NONE"}</strong>
+          <br />
+          Name: {session?.user?.name ?? "NONE"}
           <br />
           Sesja wygaśnie za:{" "}
           <strong>
