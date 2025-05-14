@@ -1,3 +1,5 @@
+import { Button } from "../ui/button";
+
 export default function CartSummary({
   totalItems,
   totalPrice,
@@ -22,9 +24,7 @@ export default function CartSummary({
         <span>${totalPrice.toFixed(2)}</span>
       </div>
 
-      <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded">
-        Checkout
-      </button>
+      <Button className="w-full">Checkout</Button>
     </div>
   );
 }

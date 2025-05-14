@@ -20,10 +20,14 @@ export default function CartPageContent() {
 
     fetchCart();
   }, []);
+  //REWORK reduce where selected === true
+  const totalItems = items.reduce(
+    (sum, i) => (i.selected ? sum + i.quantity : sum),
+    0
+  );
 
-  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce(
-    (sum, i) => sum + i.quantity * i.product.price,
+    (sum, i) => (i.selected ? sum + i.quantity * i.product.price : sum),
     0
   );
 

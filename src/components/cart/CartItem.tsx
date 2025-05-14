@@ -2,6 +2,7 @@ import type { CartItem, Product, ProductImage } from "@/generated/prisma";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
+import { useState } from "react";
 
 export type CartItemWithProductImage = CartItem & {
   product: Product & {
@@ -10,13 +11,34 @@ export type CartItemWithProductImage = CartItem & {
 };
 
 export default function CartItem({ item }: { item: CartItemWithProductImage }) {
+  const [isSelected, setIsSelected] = useState(item.selected);
+
+  const toggleSelected = async (
+    productId: number,
+    currentSelected: boolean
+  ) => {
+    try {
+      const res = await fetch("/api/cart", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          selected: !currentSelected,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update selection");
+      setIsSelected(!isSelected);
+    } catch (err) {
+      console.error("Error updating selection:", err);
+    }
+  };
+
   return (
     <div className="flex border rounded-lg p-4 gap-4">
       <Checkbox
-        checked={item.selected}
-        onChange={() => {
-          console.log("Toggle Selected FALSE/TRUE");
-        }}
+        checked={isSelected}
+        onClick={() => toggleSelected(item.product.id, item.selected)}
       />
 
       <Image
@@ -49,7 +71,7 @@ export default function CartItem({ item }: { item: CartItemWithProductImage }) {
               console.log("handler zmiany -1");
             }}
           >
-            –
+            -
           </button>
           <span>{item.quantity}</span>
           <button

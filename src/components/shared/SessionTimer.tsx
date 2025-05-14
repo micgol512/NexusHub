@@ -30,24 +30,24 @@ export default function SessionTimer() {
     return () => clearInterval(interval);
   }, [session, router]);
 
-  if (status === "loading") return <p>Sprawdzanie sesji...</p>;
-  if (status === "unauthenticated") return <p>Użytkownik niezalogowany.</p>;
+  if (status === "loading") return <p>Checking...</p>;
+  if (status === "unauthenticated") return <p>User unauthenticated.</p>;
 
   return (
     <div className="text-sm text-(--foreground)">
       {timeLeft !== null ? (
         <p>
-          Zalogowano jako: <strong>{session?.user?.email ?? "NONE"}</strong>
+          Logged as: <strong>{session?.user?.email ?? "NONE"}</strong>
           <br />
-          Name: {session?.user?.name ?? "NONE"}
+          Name: {session?.user.name ?? "NONE"}
           <br />
-          Sesja wygaśnie za:{" "}
+          Auto Logout for:{" "}
           <strong>
             {Math.floor(timeLeft / 60)}m {timeLeft % 60}s
           </strong>
         </p>
       ) : (
-        <p>Obliczanie czasu sesji...</p>
+        <p>Loading data...</p>
       )}
     </div>
   );
