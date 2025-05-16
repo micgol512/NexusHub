@@ -1,6 +1,6 @@
 {
-  "name": "nexus_hub",
-  "version": "0.1.0",
+  "name": "cyber_tech",
+  "version": "0.1.1",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seed.ts",

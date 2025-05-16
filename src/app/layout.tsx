@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "@/components/context/SessionProvider";
 
 export const metadata: Metadata = {
-  title: "NexusHub",
+  title: "CyberTech",
   description: "Furutistic platform for customers and sellers",
   icons: {
     icon: "/favicon.ico",
