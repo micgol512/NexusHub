@@ -1,22 +1,4 @@
-// interface Product {
-//   id: number;
-//   name: string;
-//   description: string;
-//   price: number;
-//   discountPrice?: number;
-//   brand: { name: string };
-//   category: { name: string };
-//   images: { id: number; url: string }[];
-//   colors: { id: number; name: string }[];
-// }
-
 import { FullProduct } from "@/components/product/ProductCard";
-
-// interface Params {
-//   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-// }
-// export default async function ProductPage(props: Params) {
-//   const searchParams = (await props.searchParams) ?? "";
 
 export default async function ProductPage({
   params,

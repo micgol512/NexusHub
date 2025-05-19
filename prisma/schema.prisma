@@ -30,6 +30,14 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELED
+  REFUNDED
+}
+
 enum CouponType {
   CASHBACK
   PERCENT_OFF
@@ -58,7 +66,6 @@ model User {
 
   addresses      Address[]
   paymentMethods PaymentMethod[]
-  transactions   Transaction[]
   orders         Order[]
   wishlist       WishlistItem[]
   favourites     FavouriteItem[]
@@ -120,16 +127,6 @@ model Coupon {
   type         CouponType
   value        Float
   requirements Float
-}
-
-model Transaction {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   Int      @unique
-  status    String
-  createdAt DateTime @default(now())
 }
 
 model RatingCount {
@@ -236,16 +233,6 @@ model Discussion {
   replies   Discussion[] @relation("DiscussionReplies")
 }
 
-// model Reply {
-//   id           Int        @id @default(autoincrement())
-//   discussion   Discussion @relation(fields: [discussionId], references: [id])
-//   discussionId Int
-//   user         User       @relation(fields: [userId], references: [id])
-//   userId       Int
-//   postDate     DateTime   @default(now())
-//   message      String
-// }
-
 model Faq {
   id        Int     @id @default(autoincrement())
   product   Product @relation(fields: [productId], references: [id])
@@ -285,7 +272,9 @@ model Order {
   paymentMethodId   Int?
   shippingAddress   Address?       @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId Int?
-  transaction       Transaction?
+
+  transactionStatus TransactionStatus @default(PENDING)
+  paidAt            DateTime?
 }
 
 model OrderItem {
@@ -299,41 +288,6 @@ model OrderItem {
   note        String?
 }
 
-// model Account {
-//   id                String  @id @default(cuid())
-//   userId            String
-//   type              String
-//   provider          String
-//   providerAccountId String
-//   refresh_token     String?
-//   access_token      String?
-//   expires_at        Int?
-//   token_type        String?
-//   scope             String?
-//   id_token          String?
-//   session_state     String?
-
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@unique([provider, providerAccountId])
-// }
-
-// model Session {
-//   id           String   @id @default(cuid())
-//   sessionToken String   @unique
-//   userId       String
-//   expires      DateTime
-
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
-// model VerificationToken {
-//   identifier String
-//   token      String   @unique
-//   expires    DateTime
-
-//   @@unique([identifier, token])
-// }
 model Account {
   userId                   String
   type                     String

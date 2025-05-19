@@ -81,7 +81,7 @@ export default function FilterSide() {
   }, [searchParams]);
 
   const applyFilters = () => {
-    const params = new URLSearchParams(window.location.search); // pobiera aktualne query
+    const params = new URLSearchParams(window.location.search);
 
     params.delete("category");
     params.delete("rating");

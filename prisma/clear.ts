@@ -18,8 +18,6 @@ async function main() {
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
 
-  await prisma.transaction.deleteMany();
-
   await prisma.coupon.deleteMany();
   await prisma.paymentMethod.deleteMany();
   await prisma.address.deleteMany();

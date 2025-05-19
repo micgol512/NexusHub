@@ -1,7 +1,6 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const GET = async () => {
-  const prisma = new PrismaClient();
   const users = await prisma.product.findMany({
     where: {
       OR: [
@@ -20,4 +19,22 @@ export const GET = async () => {
       "Content-Type": "application/json",
     },
   });
+};
+export const POST = async () => {
+  // const session = await getServerSession(authOptions);
+  // if (!session?.user?.id) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
+  const userId = "6";
+  const paymentMethod = await prisma.paymentMethod.findFirst({
+    where: {
+      userId,
+    },
+  });
+  const shippingAddress = await prisma.address.findFirst({
+    where: {
+      userId,
+    },
+  });
+  return new Response(JSON.stringify({ paymentMethod, shippingAddress }));
 };

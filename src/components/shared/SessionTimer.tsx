@@ -1,13 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function SessionTimer() {
   const { data: session, status } = useSession();
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     if (!session || !session.expires) return;
@@ -21,14 +19,14 @@ export default function SessionTimer() {
       if (diff <= 0) {
         clearInterval(interval);
         setTimeLeft(0);
-        router.push("/");
+        signOut({ callbackUrl: "/" });
       } else {
         setTimeLeft(diff);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [session, router]);
+  }, [session]);
 
   if (status === "loading") return <p>Checking...</p>;
   if (status === "unauthenticated") return <p>User unauthenticated.</p>;

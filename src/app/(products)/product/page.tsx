@@ -1,5 +1,3 @@
-// "use client";
-
 import { FullProduct } from "@/components/product/ProductCard";
 import ProductList from "@/components/product/ProductList";
 import PaginationPage from "@/components/shared/PaginationPage";

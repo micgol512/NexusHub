@@ -3,9 +3,11 @@ import { Button } from "../ui/button";
 export default function CartSummary({
   totalItems,
   totalPrice,
+  onCheckout,
 }: {
   totalItems: number;
   totalPrice: number;
+  onCheckout: () => void;
 }) {
   return (
     <div className="w-full md:w-72 border rounded-lg p-4 space-y-4">
@@ -24,7 +26,13 @@ export default function CartSummary({
         <span>${totalPrice.toFixed(2)}</span>
       </div>
 
-      <Button className="w-full">Checkout</Button>
+      <Button
+        className="w-full"
+        onClick={onCheckout}
+        disabled={totalItems === 0}
+      >
+        Checkout
+      </Button>
     </div>
   );
 }
