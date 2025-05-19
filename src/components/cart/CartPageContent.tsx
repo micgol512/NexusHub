@@ -6,6 +6,9 @@ import CartSummary from "./CartSummary";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 export default function CartPageContent() {
   const [items, setItems] = useState<CartItemWithProductImage[]>([]);
@@ -51,7 +54,7 @@ export default function CartPageContent() {
 
   const handleCheckout = async () => {
     try {
-      await Promise.all(
+      const res = await Promise.all(
         items.map((item) =>
           fetch("/api/cart", {
             method: "PATCH",
@@ -64,15 +67,10 @@ export default function CartPageContent() {
         )
       );
 
-      const res = await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (res.ok) {
+      if (res.every((r) => r.ok)) {
         router.push("/order");
       } else {
-        alert("Failed to checkout.");
+        alert("Some issues with update cart...");
       }
     } catch (error) {
       console.error("Checkout error:", error);
@@ -94,7 +92,24 @@ export default function CartPageContent() {
   );
 
   if (loading) return <div>Loading cart...</div>;
-
+  if (items.length === 0)
+    return (
+      <div>
+        {" Cart empty. Go to "}
+        <Link
+          href={"/product"}
+          className={cn(
+            buttonVariants({
+              variant: "link",
+            }),
+            "p-0 m-0"
+          )}
+        >
+          Products Page
+        </Link>
+        {" to add something."}
+      </div>
+    );
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="flex-1 space-y-4">

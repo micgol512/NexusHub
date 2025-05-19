@@ -10,8 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -240,11 +238,10 @@ export default function FilterSide() {
       <Separator className="my-4" orientation="horizontal" />
       <Button
         onClick={applyFilters}
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "border-(--primary) text-(--primary) w-full",
-          "hover:bg-(--primary) hover:text-(--background) hover:border-(--primary)"
-        )}
+        variant={"outline"}
+        className={
+          "border-(--primary) text-(--primary) w-full hover:bg-(--primary) hover:text-(--background) hover:border-(--primary)"
+        }
       >
         Apply filter
       </Button>

@@ -5,7 +5,7 @@ export const GET = async (request: Request) => {
   const pathParts = url.pathname.split("/");
   const idFromPath = pathParts[pathParts.length - 1];
   const productID = Number(idFromPath);
-  console.log("API proudct ID:", idFromPath);
+  // console.log("API proudct ID:", idFromPath);
 
   const products = await prisma.product.findMany({
     where: { id: productID },
