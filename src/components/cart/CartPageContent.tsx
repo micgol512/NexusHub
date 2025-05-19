@@ -5,13 +5,13 @@ import CartItem, { CartItemWithProductImage } from "./CartItem";
 import CartSummary from "./CartSummary";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function CartPageContent() {
   const [items, setItems] = useState<CartItemWithProductImage[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
-  // const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -50,15 +50,33 @@ export default function CartPageContent() {
   };
 
   const handleCheckout = async () => {
-    const res = await fetch("/api/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      await Promise.all(
+        items.map((item) =>
+          fetch("/api/cart", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productId: item.product.id,
+              selected: selectedIds.includes(item.product.id),
+            }),
+          })
+        )
+      );
 
-    if (res.ok) {
-      console.log("Cart:", await res.json());
-    } else {
-      alert("Failed to checkout.");
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (res.ok) {
+        router.push("/order");
+      } else {
+        alert("Failed to checkout.");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("Error during checkout.");
     }
   };
 

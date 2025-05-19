@@ -42,13 +42,3 @@ export const UserLogin = () => {
 };
 
 export default UserLogin;
-
-//  <Link
-//         href={`/login`}
-//         className={cn(
-//           buttonVariants({ variant: "default" }),
-//           "h-[54px] w-[121px]"
-//         )}
-//       >
-//         SING IN
-//       </Link>
