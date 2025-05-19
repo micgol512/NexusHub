@@ -34,7 +34,11 @@ export const UserLogin = () => {
       <Link href="/user">
         <Avatar>
           <AvatarImage src={userImage} />
-          <AvatarFallback>Name</AvatarFallback>
+          <AvatarFallback>
+            {(session?.user?.name ? session?.user?.name : session?.user?.email)
+              .slice(0, 2)
+              .toUpperCase()}
+          </AvatarFallback>
         </Avatar>
       </Link>
     </div>

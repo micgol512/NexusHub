@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Order, OrderItem } from "@/generated/prisma";
+// import { Order, OrderItem } from "@/generated/prisma";
 
 export async function GET() {
   //   const session = await getServerSession(authOptions);
@@ -63,7 +63,7 @@ export async function POST() {
   //   },
   // });
 
-  return NextResponse.json({ cart });
+  //   return NextResponse.json({ cart });
   if (!cart || cart.items.length === 0) {
     return NextResponse.json({ error: "No selected items" }, { status: 400 });
   }
@@ -86,14 +86,6 @@ export async function POST() {
           priceAtTime: item.product.price,
         })),
       },
-    },
-  });
-
-  await prisma.transaction.create({
-    data: {
-      userId,
-      orderId: order.id,
-      status: "PENDING",
     },
   });
 

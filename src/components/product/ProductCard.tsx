@@ -50,7 +50,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
 
   return (
     <Card
-      className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105"
+      className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105 hover:not:scale-50"
       onClick={() => handleClick(product.id.toString())}
       //   style={{
       //     backgroundColor: product.colors[0]?.hash || undefined,

@@ -274,7 +274,7 @@ model Order {
   shippingAddressId Int?
 
   transactionStatus TransactionStatus @default(PENDING)
-  paidAt            DateTime?
+  paidAt            DateTime?         @default(now())
 }
 
 model OrderItem {

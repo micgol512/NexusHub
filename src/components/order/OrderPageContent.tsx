@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { CartItem } from "@/generated/prisma";
 import { CartItemWithProductImage } from "../cart/CartItem";
 import OrderSummary from "./OrderSummary";
-import OrderItem from "./OrderItem";
+import OrderItem from "./Orderitem";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CartItemWithProductImage[]>([]);

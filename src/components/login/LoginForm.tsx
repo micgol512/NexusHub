@@ -159,22 +159,34 @@ export default function LoginForm() {
           <Button
             onClick={() => signIn("github", { callbackUrl })}
             variant={"outline"}
-            className="h-min w-min p-2"
+            className="p-2"
           >
-            <Image src="/github-icon.svg" alt="Github" width={24} height={24} />
+            <Image
+              src="/icons/github-icon.svg"
+              alt="GitHub"
+              width={24}
+              height={24}
+            />
           </Button>
           <Button
             onClick={() => signIn("google", { callbackUrl })}
-            className="bg-white p-2 border rounded shadow hover:bg-gray-100"
+            variant={"outline"}
+            className="p-2"
           >
-            <Image src="/google-icon.svg" alt="Google" width={24} height={24} />
+            <Image
+              src="/icons/google-icon.svg"
+              alt="Google"
+              width={24}
+              height={24}
+            />
           </Button>
           <Button
             onClick={() => signIn("facebook", { callbackUrl })}
-            className="bg-white p-2 border rounded shadow hover:bg-gray-100"
+            variant={"outline"}
+            className="p-2"
           >
             <Image
-              src="/facebook-icon.svg"
+              src="/icons/facebook-icon.svg"
               alt="Facebook"
               width={24}
               height={24}
@@ -182,9 +194,15 @@ export default function LoginForm() {
           </Button>
           <Button
             onClick={() => signIn("apple", { callbackUrl })}
-            className="bg-white p-2 border rounded shadow hover:bg-gray-100"
+            variant={"outline"}
+            className="p-2"
           >
-            <Image src="/apple-icon.svg" alt="Apple" width={24} height={24} />
+            <Image
+              src="/icons/apple-icon.svg"
+              alt="Apple"
+              width={24}
+              height={24}
+            />
           </Button>
         </div>
       </Card>
