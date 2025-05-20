@@ -10,8 +10,8 @@ import Link from "next/link";
 
 export const Header = () => {
   return (
-    <header className="flex text-nowrap justify-center items-center px-10 py-8 bg-(--background) w-full max-h-[224px]">
-      <div className="flex flex-col gap-[40px] w-full max-w-[1920px] ">
+    <header className="flex text-nowrap justify-center items-center px-10 py-8 bg-(--background) w-full max-h-[224px] m-0">
+      <div className="flex flex-col gap-[20px] w-full max-w-[1920px] ">
         <div className="flex flex-row justify-between align-middle gap-4 m-0 p-0">
           <Link href={"/"}>
             <Logo />
@@ -20,8 +20,13 @@ export const Header = () => {
           <UserLogin />
         </div>
         <NavBar />
-        <Separator />
-        <PathShow />
+        <div>
+          <Separator className="mb-2" />
+          <PathShow />{" "}
+          <div className="hidden w-full h-[30px] rounded-(--radius) pl-[24px] border-2 border-(--success)">
+            {/* To new component and context for notification or use Toast from shadcn */}
+          </div>
+        </div>
       </div>
     </header>
   );

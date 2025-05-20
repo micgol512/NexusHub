@@ -11,9 +11,10 @@ import { Card, CardContent } from "../ui/card";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button";
+import { Progress } from "../ui/progress";
 
 export type FullProduct = Product & {
   category: Category;
@@ -66,7 +67,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
           width={100}
           height={100}
           alt={product.name}
-          className="max-h-[204px] bg-(--muted) rounded-(--radius) self-center"
+          className="h-[204px] w-max bg-(--muted) rounded-(--radius) self-center"
         />
         <div className="w-min bg-(--category-bg) text-(--category-fg) px-[10px] py-[4px] rounded-(--radius)">
           {product.category.name}
@@ -83,29 +84,44 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
             {product.price}
           </p>
         </div>
-        <div className="flex flex-row ">
-          <Star color="var(--primary)" fill="var(--primary)" />{" "}
-          <p>
-            {product.rating?.fiveStar ? "Są oceny i obliczenia" : "(5)"}
-            {"/5.0"}
-          </p>
-          <Separator orientation="vertical" className="my-2" />
-          <p>
-            {product.sold}
-            {" sold"}
-          </p>
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row">
+            <Star color="var(--primary)" fill="var(--primary)" />{" "}
+            <p>
+              {product?.rating ? "Są oceny i obliczenia" : "(5)"}
+              {"/5.0"}
+            </p>
+          </div>
+
+          <Separator orientation="vertical" className="mx-2 border-1 my-1" />
+          {product?.sold && (
+            <p className="justify-self-end self-end place-self-end">
+              {product.sold}
+              {" sold"}
+            </p>
+          )}
         </div>
-        <div>ProgresBar</div>
-        <div>info sztuk sprzedanych z ilości</div>
+        <Progress value={product.sold} max={product.stock} />
+        <div>{`${product.sold} / ${product.stock}`}</div>
         <Button
-          variant={"ghost"}
-          className="absolute left-[10px] top-[10px]"
+          variant={"icon"}
+          className="absolute left-[10px] top-[10px] hover:scale-110"
           onClick={(e) => {
             e.stopPropagation();
             handleAddToCart(product.id);
           }}
         >
           <ShoppingCart size={48} />
+        </Button>
+        <Button
+          variant={"icon"}
+          className="absolute right-[10px] top-[10px] hover:scale-110"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddToCart(product.id);
+          }}
+        >
+          <Heart size={48} fill="red" color="red" />
         </Button>
       </CardContent>
     </Card>

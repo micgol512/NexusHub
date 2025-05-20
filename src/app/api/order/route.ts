@@ -68,6 +68,17 @@ export async function POST() {
     return NextResponse.json({ error: "No selected items" }, { status: 400 });
   }
 
+  for (const item of cart.items) {
+    if (item.product.stock < item.quantity) {
+      return NextResponse.json(
+        {
+          error: `Product "${item.product.name}" is out of stock. Available: ${item.product.stock}, requested: ${item.quantity}`,
+        },
+        { status: 400 }
+      );
+    }
+  }
+
   const totalPrice = cart.items.reduce(
     (sum, item) => sum + item.quantity * item.product.price,
     0
@@ -89,6 +100,15 @@ export async function POST() {
     },
   });
 
+  for (const item of cart.items) {
+    await prisma.product.update({
+      where: { id: item.productId },
+      data: {
+        stock: { decrement: item.quantity },
+        sold: { increment: item.quantity },
+      },
+    });
+  }
   await prisma.cartItem.deleteMany({
     where: {
       cartId: cart.id,
