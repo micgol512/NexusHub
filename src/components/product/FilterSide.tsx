@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Minus, Plus } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Category } from "@/generated/prisma";
 
 function useSelectableFilter(initial: string[] = ["All"]) {
   const [selected, setSelected] = useState<string[]>(initial);
@@ -44,18 +45,16 @@ export default function FilterSide() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  //to zamienić na pobieranie wszystkich kategori i ocen za pomocą fetch() z backendu
-  // const categories = await fetch("/api/categories").then((res) => res.json());
-  // const ratings = await fetch("/api/ratings").then((res) => res.json());
-  const categories = [
-    "Mouse",
-    "Headphone",
-    "Keyboard",
-    "Monitor",
-    "Speaker",
-    "Webcam",
-    "Microphone",
-  ];
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await fetch(`/api/category`);
+      const { categories }: { categories: Category[] } = await res.json();
+      setCategories(categories.map((cat) => cat.name));
+    };
+    fetchCategories();
+  }, []);
 
   const ratings = ["5 Stars", "4 Stars", "3 Stars", "2 Stars", "1 Stars"];
 
@@ -127,7 +126,9 @@ export default function FilterSide() {
 
     return ["All", ...sorted];
   })();
-
+  if (categories.length === 0) {
+    return <div>Loading filters...</div>;
+  }
   return (
     <>
       <Accordion

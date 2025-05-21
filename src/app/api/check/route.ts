@@ -1,4 +1,7 @@
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const users = await prisma.product.findMany({
@@ -21,20 +24,20 @@ export const GET = async () => {
   });
 };
 export const POST = async () => {
-  // const session = await getServerSession(authOptions);
-  // if (!session?.user?.id) {
-  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  // }
-  const userId = "6";
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  // const userId = "6";
   const paymentMethod = await prisma.paymentMethod.findFirst({
     where: {
-      userId,
+      userId: session?.user?.id,
     },
   });
   const shippingAddress = await prisma.address.findFirst({
     where: {
-      userId,
+      userId: session?.user?.id,
     },
   });
-  return new Response(JSON.stringify({ paymentMethod, shippingAddress }));
+  return new NextResponse(JSON.stringify({ paymentMethod, shippingAddress }));
 };

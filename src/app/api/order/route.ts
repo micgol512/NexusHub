@@ -28,6 +28,7 @@ export async function POST() {
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   // const session = { user: { id: "cmau5a5zn0000ux1gbpm45a8v" } };
   const userId = session.user.id;
 
@@ -36,12 +37,12 @@ export async function POST() {
       userId,
     },
   });
+
   if (!paymentMethod)
     return NextResponse.json(
       { error: "No payment method selected" },
       { status: 400 }
     );
-
   const shippingAddress = await prisma.address.findFirst({
     where: {
       userId,
@@ -56,14 +57,7 @@ export async function POST() {
       items: { where: { selected: true }, include: { product: true } },
     },
   });
-  // const cartitems = await prisma.cartItem.findMany({
-  //   where: {
-  //     cartId: cart?.id,
-  //     selected: true,
-  //   },
-  // });
 
-  //   return NextResponse.json({ cart });
   if (!cart || cart.items.length === 0) {
     return NextResponse.json({ error: "No selected items" }, { status: 400 });
   }
@@ -83,7 +77,6 @@ export async function POST() {
     (sum, item) => sum + item.quantity * item.product.price,
     0
   );
-
   const order = await prisma.order.create({
     data: {
       userId,
@@ -109,6 +102,7 @@ export async function POST() {
       },
     });
   }
+
   await prisma.cartItem.deleteMany({
     where: {
       cartId: cart.id,

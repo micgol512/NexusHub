@@ -53,14 +53,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
     <Card
       className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105 hover:not:scale-50"
       onClick={() => handleClick(product.id.toString())}
-      //   style={{
-      //     backgroundColor: product.colors[0]?.hash || undefined,
-      //   }}
     >
-      {/* <CardTitle>
-        {product.name} ({product.brand.name})
-        {product.discountPrice && `(${product.discountPrice})`}
-      </CardTitle> */}
       <CardContent className="relative flex flex-col gap-[18px]">
         <Image
           src={`${product.images[0].url}`}
@@ -88,8 +81,8 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
           <div className="flex flex-row">
             <Star color="var(--primary)" fill="var(--primary)" />{" "}
             <p>
-              {product?.rating ? "Są oceny i obliczenia" : "(5)"}
-              {"/5.0"}
+              {product?.rating ? "Calculating..." : "(5)"}
+              {" / 5.0"}
             </p>
           </div>
 
@@ -102,7 +95,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
           )}
         </div>
         <Progress value={product.sold} max={product.stock} />
-        <div>{`${product.sold} / ${product.stock}`}</div>
+        <div>{`${product.sold} / ${product.stock + product.sold}`}</div>
         <Button
           variant={"icon"}
           className="absolute left-[10px] top-[10px] hover:scale-110"

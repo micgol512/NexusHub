@@ -17,18 +17,3 @@ export const GET = async () => {
     },
   });
 };
-
-// return new Response(
-//   JSON.stringify({
-//     products,
-//     total,
-//     currentPage: page,
-//     totalPages: Math.ceil(total / limit),
-//   }),
-//   {
-//     status: 200,
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   }
-// );

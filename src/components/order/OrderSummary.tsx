@@ -1,15 +1,10 @@
-// Zakładam, że masz już dane z backendu (np. `cartItems`, `userAddresses`, `selectedPaymentMethod`, `selectedShippingMethod`, `coupon`, itp.)
-// Komponent CheckoutPage
-
 import React from "react";
-
 import { Button } from "@/components/ui/button";
-
 import { Card, CardContent } from "@/components/ui/card";
-
 import { CartItemWithProductImage } from "../cart/CartItem";
+import { useRouter } from "next/navigation";
 
-const OrderSummary = ({
+export const OrderSummary = ({
   cartItems,
 }: {
   cartItems: CartItemWithProductImage[];
@@ -28,6 +23,21 @@ const OrderSummary = ({
     shippingPrice +
     insurance +
     serviceFee;
+  const router = useRouter();
+
+  const handlePayNow = async () => {
+    try {
+      const req = await fetch("/api/order", { method: "POST" });
+      if (req.ok) {
+        router.push("/user");
+      } else {
+        alert("Something went wrong...");
+      }
+    } catch (error) {
+      console.error("Order error:", error);
+      alert("Error during order.");
+    }
+  };
 
   return (
     <div>
@@ -66,7 +76,9 @@ const OrderSummary = ({
             </div>
           </div>
 
-          <Button className="w-full mt-4">Pay Now</Button>
+          <Button className="w-full mt-4" onClick={handlePayNow}>
+            Pay Now
+          </Button>
         </CardContent>
       </Card>
     </div>
