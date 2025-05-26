@@ -1,7 +1,6 @@
 "use client";
 import FilterSide from "@/components/product/FilterSide";
 import ProductFilterBar from "@/components/product/ProductFilterBar";
-import CategorySlider from "@/components/sliders/CategorySlider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Suspense } from "react";
 export default function ProductLayout({
