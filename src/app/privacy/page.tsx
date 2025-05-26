@@ -1,9 +1,11 @@
 export default function PrivacyPage() {
   return (
     <main>
-      <h1>Privacy Policy</h1>
+      <h1>
+        <strong>Privacy Policy</strong>
+      </h1>
       <p>
-        {`This site uses Facebook Login to authenticate users. We do not share or
+        {`This site is only for education and we do not share or
         sell your data.`}
       </p>
     </main>

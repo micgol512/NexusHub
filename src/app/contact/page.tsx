@@ -11,7 +11,7 @@ export default function ContactPage() {
     e.preventDefault();
   };
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 mb-2">
       {/* <div className="grid grid-cols-1 md:grid-cols-2 bg-muted rounded-xl p-6"> */}
       <div className="flex flex-row justify-around bg-(--muted) rounded-xl p-6">
         <div className="flex flex-col gap-3 justify-center">

@@ -28,17 +28,17 @@ export const RecomendationSlider = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-10">
+      <div className="flex justify-center items-center">
         <Loader2 className="animate-spin h-10 w-10 text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="py-6">
-      <h2 className="text-2xl font-semibold mb-4 px-4">Recomendation</h2>
-      <ScrollArea className="w-full whitespace-nowrap px-4">
-        <div className="flex flex-row w-max space-x gap-4">
+    <div className="w-full flex flex-col gap-4 p-0 max-w-[1920px]">
+      <h2 className="text-2xl font-semibold px-4">Recomendation</h2>
+      <ScrollArea className="flex flex-row w-full max-w-[1840px]">
+        <div className="flex flex-row">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

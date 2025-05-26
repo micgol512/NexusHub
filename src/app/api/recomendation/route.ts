@@ -7,7 +7,7 @@ export async function GET() {
   const usedIds = new Set<number>();
   const items: Product[] = [];
 
-  while (items.length < 5) {
+  while (items.length < 7) {
     const randomID = Math.ceil(Math.random() * total);
     if (usedIds.has(randomID)) continue;
 

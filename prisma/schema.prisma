@@ -257,6 +257,7 @@ model CartItem {
   productId Int
   quantity  Int
   selected  Boolean @default(true)
+  color     String
   note      String?
 }
 
@@ -284,6 +285,7 @@ model OrderItem {
   product     Product @relation(fields: [productId], references: [id])
   productId   Int
   quantity    Int
+  color       String
   priceAtTime Float
   note        String?
 }

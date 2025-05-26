@@ -33,7 +33,11 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
     try {
       const res = await fetch("/api/cart", {
         method: "POST",
-        body: JSON.stringify({ productId, quantity: 1 }),
+        body: JSON.stringify({
+          productId,
+          quantity: 1,
+          selectedColor: "#00000",
+        }),
         headers: {
           "Content-Type": "application/json",
         },
