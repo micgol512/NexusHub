@@ -105,7 +105,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { productId } = await req.json();
+  const { productId, color } = await req.json();
 
   if (!productId) {
     return NextResponse.json(
@@ -121,11 +121,13 @@ export async function DELETE(req: NextRequest) {
   if (!cart) {
     return NextResponse.json({ error: "Cart not found" }, { status: 404 });
   }
+  // console.log("Id przekazane: ", productId);
 
   const deletedItem = await prisma.cartItem.deleteMany({
     where: {
       cartId: cart.id,
       productId: productId,
+      color: color,
     },
   });
 

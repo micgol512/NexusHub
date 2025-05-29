@@ -61,7 +61,7 @@ export default function LoginForm() {
     if (res?.error) {
       setFormError("Invalid login credentials.");
     } else {
-      router.push(callbackUrl);
+      router.push("/");
     }
   };
 

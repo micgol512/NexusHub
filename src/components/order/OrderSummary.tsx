@@ -27,6 +27,21 @@ export const OrderSummary = ({
 
   const handlePayNow = async () => {
     try {
+      await Promise.all(
+        cartItems.map((item) =>
+          fetch("/api/cart", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              productId: item.productId,
+              quantity: item.quantity,
+              selected: true,
+            }),
+          })
+        )
+      );
       const req = await fetch("/api/order", { method: "POST" });
       if (req.ok) {
         router.push("/user");

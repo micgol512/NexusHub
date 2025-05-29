@@ -23,7 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        storageKey="theme"
+      >
         <body className="min-h-screen flex flex-col bg-(--background) text-(--foreground) items-center justify-center gap-0">
           <SessionProvider>
             <Header />

@@ -11,7 +11,7 @@ import { Card, CardContent } from "../ui/card";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
@@ -36,7 +36,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         body: JSON.stringify({
           productId,
           quantity: 1,
-          selectedColor: "#00000",
+          selectedColor: product.colors[0].hash,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         >
           <ShoppingCart size={48} />
         </Button>
-        <Button
+        {/* <Button
           variant={"icon"}
           className="absolute right-[10px] top-[10px] hover:scale-110"
           onClick={(e) => {
@@ -119,7 +119,7 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
           }}
         >
           <Heart size={48} fill="red" color="red" />
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   );

@@ -26,7 +26,7 @@ export default function CartPageContent() {
 
         const initiallySelected = fetchedItems
           .filter((item: CartItemWithProductImage) => item.selected)
-          .map((item: CartItemWithProductImage) => item.product.id);
+          .map((item: CartItemWithProductImage) => item.id);
 
         setSelectedIds(initiallySelected);
       }
@@ -36,11 +36,11 @@ export default function CartPageContent() {
     fetchCart();
   }, []);
 
-  const handleToggleSelected = (productId: number) => {
+  const handleToggleSelected = (cartId: number) => {
     setSelectedIds((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+      prev.includes(cartId)
+        ? prev.filter((id) => id !== cartId)
+        : [...prev, cartId]
     );
   };
 
@@ -48,10 +48,13 @@ export default function CartPageContent() {
     if (selectedIds.length === items.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(items.map((i) => i.product.id));
+      setSelectedIds(items.map((i) => i.id));
     }
   };
-
+  const handleItemDelete = (deletedCartId: number) => {
+    setItems((prev) => prev.filter((item) => item.id !== deletedCartId));
+    setSelectedIds((prev) => prev.filter((id) => id !== deletedCartId));
+  };
   const handleCheckout = async () => {
     try {
       const res = await Promise.all(
@@ -61,7 +64,7 @@ export default function CartPageContent() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               productId: item.product.id,
-              selected: selectedIds.includes(item.product.id),
+              selected: selectedIds.includes(item.id),
             }),
           })
         )
@@ -79,15 +82,13 @@ export default function CartPageContent() {
   };
 
   const totalItems = items.reduce(
-    (sum, i) => (selectedIds.includes(i.product.id) ? sum + i.quantity : sum),
+    (sum, i) => (selectedIds.includes(i.id) ? sum + i.quantity : sum),
     0
   );
 
   const totalPrice = items.reduce(
     (sum, i) =>
-      selectedIds.includes(i.product.id)
-        ? sum + i.quantity * i.product.price
-        : sum,
+      selectedIds.includes(i.id) ? sum + i.quantity * i.product.price : sum,
     0
   );
 
@@ -126,8 +127,9 @@ export default function CartPageContent() {
           <CartItem
             key={item.id}
             item={item}
-            checked={selectedIds.includes(item.product.id)}
-            onToggleSelected={() => handleToggleSelected(item.product.id)}
+            checked={selectedIds.includes(item.id)}
+            onToggleSelected={() => handleToggleSelected(item.id)}
+            onDelete={() => handleItemDelete(item.id)}
           />
         ))}
       </div>

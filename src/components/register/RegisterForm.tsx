@@ -27,6 +27,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Logo } from "../shared/Logo";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z
   .object({
@@ -54,6 +55,7 @@ const FormSchema = z
 type FormValues = z.infer<typeof FormSchema>;
 
 export function RegisterForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -81,6 +83,7 @@ export function RegisterForm() {
       setErrorMessage(result.error || "Something went wrong.");
     } else {
       setSuccessMessage("Account created successfully!");
+      router.push("/login");
     }
   };
 

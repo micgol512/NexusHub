@@ -5,9 +5,12 @@ import type { CartItem } from "@/generated/prisma";
 import { CartItemWithProductImage } from "../cart/CartItem";
 import OrderSummary from "./OrderSummary";
 import OrderItem from "./OrderItem";
+import Image from "next/image";
+import { ShieldCheckIcon } from "lucide-react";
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState<CartItemWithProductImage[]>([]);
+
   // const [address, setAddress] = useState<Address>();
 
   // const [coupon, setCoupon] = useState("");
@@ -22,6 +25,14 @@ const CheckoutPage = () => {
 
     fetchCart();
   }, []);
+
+  const handleQuantityChange = (id: number, newQuantity: number) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
 
   // const handleAddressChange = (
   //   field: keyof Address,
@@ -62,12 +73,15 @@ const CheckoutPage = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-      {/* Left column */}
       <div className="lg:col-span-2 space-y-6">
         <div>
           <h2 className="text-lg font-semibold mb-2">Your Order</h2>
           {cartItems.map((item) => (
-            <OrderItem key={`order-item-${item.id}`} item={item} />
+            <OrderItem
+              key={`order-item-${item.id}`}
+              item={item}
+              onQuantityChange={handleQuantityChange}
+            />
           ))}
         </div>
 
@@ -121,14 +135,24 @@ const CheckoutPage = () => {
           </div>
         </div> */}
 
-        {/* Shipping and Payment Method */}
         <div className="space-y-4">
           <div className="flex justify-between items-center border p-4 rounded-xl">
-            <span>NexusHub Courier</span>
+            <span className="flex gap-2">
+              <ShieldCheckIcon color={`var(--success)`} />
+              NexusHub Courier
+            </span>
             <Button variant="link">Change Shipping</Button>
           </div>
           <div className="flex justify-between items-center border p-4 rounded-xl">
-            <span>Apple Pay</span>
+            <span className="flex gap-2">
+              <Image
+                src="/icons/apple-icon.svg"
+                alt="Apple"
+                width={24}
+                height={24}
+              />
+              Apple Pay
+            </span>
             <Button variant="link">Change Payment Method</Button>
           </div>
         </div>
