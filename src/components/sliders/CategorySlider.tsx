@@ -55,7 +55,7 @@ export const CategorySlider = () => {
 
   return (
     //<div className="w-full md:flex flex-col justify-between items-center p-0 m-0 bg-[var(--background)] hidden">
-    <div className="w-full flex flex-col justify-between items-center py-5 m-0 bg-[var(--background)] max-w-[1840px]">
+    <div className="w-full flex flex-col justify-between items-center py-5 m-0 bg-[var(--background)] max-w-full">
       <div className="relative w-full h-[460px] overflow-hidden ">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div

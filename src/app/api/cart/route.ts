@@ -140,8 +140,12 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body: { productId: number; quantity?: number; selected?: boolean } =
-    await req.json();
+  const body: {
+    cartItemID: number;
+    productId: number;
+    quantity?: number;
+    selected?: boolean;
+  } = await req.json();
   const { productId, quantity, selected } = body;
 
   if (!productId || (quantity !== undefined && quantity < 1)) {
@@ -150,7 +154,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
       include: { cart: true },
     });
 

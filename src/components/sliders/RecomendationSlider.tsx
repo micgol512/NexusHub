@@ -35,9 +35,9 @@ export const RecomendationSlider = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-4 p-0 max-w-[1920px]">
+    <div className="w-full flex flex-col justify-between items-center py-5 m-0 bg-[var(--background)] max-w-full">
       <h2 className="text-2xl font-semibold px-4">Recomendation</h2>
-      <ScrollArea className="flex flex-row w-full max-w-[1840px]">
+      <ScrollArea className="flex flex-row w-full py-4">
         <div className="flex flex-row">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />

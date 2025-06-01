@@ -12,7 +12,15 @@ export const GET = async () => {
   const user = await prisma.user.findFirst({
     where: { id: session?.user?.id },
     include: {
-      orders: true,
+      orders: {
+        include: {
+          orderItems: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      },
       addresses: true,
     },
   });

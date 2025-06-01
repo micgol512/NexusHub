@@ -35,6 +35,7 @@ export const OrderSummary = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              cartItem: item.id,
               productId: item.productId,
               quantity: item.quantity,
               selected: true,
@@ -44,7 +45,7 @@ export const OrderSummary = ({
       );
       const req = await fetch("/api/order", { method: "POST" });
       if (req.ok) {
-        router.push("/user");
+        router.push("/user/transactions");
       } else {
         alert("Something went wrong...");
       }

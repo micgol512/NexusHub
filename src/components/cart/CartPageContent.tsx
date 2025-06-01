@@ -63,6 +63,7 @@ export default function CartPageContent() {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              cartItemID: item.cartId,
               productId: item.product.id,
               selected: selectedIds.includes(item.id),
             }),
