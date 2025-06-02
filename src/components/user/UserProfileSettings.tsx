@@ -15,7 +15,7 @@ export default function UserProfileSettings() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState({
-    method: "CARD", // enum: CARD, PAYPAL, GOOGLEPAY, APPLEPAY
+    method: "CARD", // enum, np. CARD, PAYPAL, itp.
     details: {
       provider: "",
       accountNumber: "",
@@ -23,7 +23,7 @@ export default function UserProfileSettings() {
     },
   });
 
-  const handleAddressSubmit = async () => {
+  const handleSubmit = async () => {
     try {
       await fetch("/api/user/address", {
         method: "POST",
@@ -31,14 +31,6 @@ export default function UserProfileSettings() {
         headers: { "Content-Type": "application/json" },
       });
 
-      toast.success("Address saved");
-    } catch {
-      toast.error("Failed to save address");
-    }
-  };
-
-  const handlePaymentSubmit = async () => {
-    try {
       await fetch("/api/user/payment-method", {
         method: "POST",
         body: JSON.stringify({
@@ -48,44 +40,41 @@ export default function UserProfileSettings() {
         headers: { "Content-Type": "application/json" },
       });
 
-      toast.success("Payment method saved");
+      toast.success("Dane zapisane");
     } catch {
-      toast.error("Failed to save payment method");
+      toast.error("Błąd przy zapisie danych");
     }
   };
 
   return (
-    <div className="space-y-12 max-w-xl">
+    <div className="space-y-8 max-w-xl">
       <div>
-        <h2 className="text-xl font-semibold mb-4">Address</h2>
-        <Label>Country</Label>
+        <h2 className="text-xl font-semibold">Adres</h2>
+        <Label>Kraj</Label>
         <Input
           value={address.country}
           onChange={(e) => setAddress({ ...address, country: e.target.value })}
         />
-        <Label>Province</Label>
+        <Label>Województwo</Label>
         <Input
           value={address.province}
           onChange={(e) => setAddress({ ...address, province: e.target.value })}
         />
-        <Label>City</Label>
+        <Label>Miasto</Label>
         <Input
           value={address.city}
           onChange={(e) => setAddress({ ...address, city: e.target.value })}
         />
-        <Label>Postal Code</Label>
+        <Label>Kod pocztowy</Label>
         <Input
           value={address.postCode}
           onChange={(e) => setAddress({ ...address, postCode: e.target.value })}
         />
-        <Button className="mt-4" onClick={handleAddressSubmit}>
-          Save Address
-        </Button>
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-        <Label>Type</Label>
+        <h2 className="text-xl font-semibold">Metoda płatności</h2>
+        <Label>Typ płatności</Label>
         <select
           className="w-full border px-2 py-2 rounded-md"
           value={paymentMethod.method}
@@ -93,13 +82,13 @@ export default function UserProfileSettings() {
             setPaymentMethod({ ...paymentMethod, method: e.target.value })
           }
         >
-          <option value="CARD">Card</option>
+          <option value="CARD">Karta</option>
           <option value="PAYPAL">PayPal</option>
           <option value="GOOGLEPAY">Google Pay</option>
           <option value="APPLEPAY">Apple Pay</option>
         </select>
 
-        <Label className="mt-2">Provider</Label>
+        <Label>Provider</Label>
         <Input
           value={paymentMethod.details.provider}
           onChange={(e) =>
@@ -109,7 +98,7 @@ export default function UserProfileSettings() {
             })
           }
         />
-        <Label>Account/Card Number</Label>
+        <Label>Numer konta lub karty</Label>
         <Input
           value={paymentMethod.details.accountNumber}
           onChange={(e) =>
@@ -122,7 +111,7 @@ export default function UserProfileSettings() {
             })
           }
         />
-        <Label>Expiry Date</Label>
+        <Label>Data ważności</Label>
         <Input
           type="month"
           value={paymentMethod.details.expiryDate}
@@ -136,10 +125,9 @@ export default function UserProfileSettings() {
             })
           }
         />
-        <Button className="mt-4" onClick={handlePaymentSubmit}>
-          Save Payment Method
-        </Button>
       </div>
+
+      <Button onClick={handleSubmit}>Zapisz dane</Button>
     </div>
   );
 }
