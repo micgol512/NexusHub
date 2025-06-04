@@ -21,10 +21,9 @@ const SuccesPage = () => {
   }, [countdown, router]);
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] gap-2 text-center">
-      <h1 className="text-2xl font-bold">Order successful!</h1>
-      <h2>Thank you for shopping!!!</h2>
+      <h1 className="text-2xl font-bold">Account created successful!</h1>
       <p className="text-lg">
-        {"Redirecting to your transactions in "}
+        {"Redirecting to LoginPage in "}
         <span className="text-4xl font-mono text-green-600">{countdown}</span>
       </p>
     </div>

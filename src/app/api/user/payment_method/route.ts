@@ -8,11 +8,11 @@ export async function GET() {
   if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const address = await prisma.address.findFirst({
+  const payment = await prisma.paymentMethod.findFirst({
     where: { userId: session.user.id },
   });
 
-  return NextResponse.json(address || {});
+  return NextResponse.json(payment || {});
 }
 
 export async function POST(req: Request) {
@@ -22,28 +22,26 @@ export async function POST(req: Request) {
 
   const data = await req.json();
 
-  const existing = await prisma.address.findFirst({
+  const existing = await prisma.paymentMethod.findFirst({
     where: { userId: session.user.id },
   });
 
   if (existing) {
     return NextResponse.json(
-      { message: "Address already exists" },
+      { message: "Payment method already exists" },
       { status: 409 }
     );
   }
 
-  const address = await prisma.address.create({
+  const payment = await prisma.paymentMethod.create({
     data: {
       userId: session.user.id,
-      country: data.country,
-      province: data.province,
-      city: data.city,
-      postCode: data.postCode,
+      method: data.method,
+      details: data.details,
     },
   });
 
-  return NextResponse.json(address);
+  return NextResponse.json(payment);
 }
 
 export async function PUT(req: Request) {
@@ -53,13 +51,11 @@ export async function PUT(req: Request) {
 
   const data = await req.json();
 
-  const updated = await prisma.address.updateMany({
+  const updated = await prisma.paymentMethod.updateMany({
     where: { userId: session.user.id },
     data: {
-      country: data.country,
-      province: data.province,
-      city: data.city,
-      postCode: data.postCode,
+      method: data.method,
+      details: data.details,
     },
   });
 

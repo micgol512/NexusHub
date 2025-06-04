@@ -22,6 +22,7 @@ export const GET = async () => {
         },
       },
       addresses: true,
+      paymentMethods: true,
     },
   });
 

@@ -47,7 +47,7 @@ export const OrderSummary = ({
       const req = await fetch("/api/order", { method: "POST" });
       if (req.ok) {
         notification("Succesfull create order.", "success");
-        router.push("/user/transactions");
+        router.push("/order/success");
       } else {
         notification("Something went wrong...", "error");
       }

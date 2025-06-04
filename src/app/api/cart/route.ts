@@ -8,7 +8,7 @@ export async function GET() {
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  // const session = { user: { id: "cmau5a5zn0000ux1gbpm45a8v" } };
+
   const cart = await prisma.cart.findUnique({
     where: { userId: session?.user?.id },
     include: {
@@ -121,7 +121,6 @@ export async function DELETE(req: NextRequest) {
   if (!cart) {
     return NextResponse.json({ error: "Cart not found" }, { status: 404 });
   }
-  // console.log("Id przekazane: ", productId);
 
   const deletedItem = await prisma.cartItem.deleteMany({
     where: {

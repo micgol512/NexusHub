@@ -23,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { notification } from "@/lib/notification";
 
 const formSchema = z.object({
   contact: z
@@ -36,7 +37,6 @@ type FormValues = z.infer<typeof formSchema>;
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [savePassword, setSavePassword] = useState(false);
-  const [formError, setFormError] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -59,7 +59,7 @@ export default function LoginForm() {
     });
 
     if (res?.error) {
-      setFormError("Invalid login credentials.");
+      notification("Invalid login credentials.", "error");
     } else {
       router.push("/");
     }
@@ -71,10 +71,6 @@ export default function LoginForm() {
       <Card className="w-full max-w-md p-6">
         <h2 className="text-xl font-semibold">Sign in</h2>
         <Separator className="my-4" />
-
-        {formError && (
-          <p className="text-sm text-center text-destructive">{formError}</p>
-        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

@@ -49,8 +49,8 @@ export default function UserProfileSettings() {
   return (
     <div className="space-y-8 max-w-xl">
       <div>
-        <h2 className="text-xl font-semibold">Adres</h2>
-        <Label>Kraj</Label>
+        <h2 className="text-xl font-semibold">Address</h2>
+        <Label>Country</Label>
         <Input
           value={address.country}
           onChange={(e) => setAddress({ ...address, country: e.target.value })}

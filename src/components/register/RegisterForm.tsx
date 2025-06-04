@@ -83,7 +83,7 @@ export function RegisterForm() {
       setErrorMessage(result.error || "Something went wrong.");
     } else {
       setSuccessMessage("Account created successfully!");
-      router.push("/login");
+      router.push("/register/success");
     }
   };
 

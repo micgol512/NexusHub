@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeChanger } from "@/components/shared/ThemeChanger";
 import { Separator } from "@/components/ui/separator";
+import { notification } from "@/lib/notification";
 
 export default function UserProfileSettings() {
   const [address, setAddress] = useState({
@@ -18,7 +18,7 @@ export default function UserProfileSettings() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState({
-    method: "CARD", // enum: CARD, PAYPAL, GOOGLEPAY, APPLEPAY
+    method: "CARD",
     details: {
       provider: "",
       accountNumber: "",
@@ -34,9 +34,9 @@ export default function UserProfileSettings() {
         headers: { "Content-Type": "application/json" },
       });
 
-      toast.success("Address saved");
+      notification("Address saved", "success");
     } catch {
-      toast.error("Failed to save address");
+      notification("Failed to save address", "error");
     }
   };
 
@@ -51,9 +51,9 @@ export default function UserProfileSettings() {
         headers: { "Content-Type": "application/json" },
       });
 
-      toast.success("Payment method saved");
+      notification("Payment method saved", "success");
     } catch {
-      toast.error("Failed to save payment method");
+      notification("Failed to save payment method", "error");
     }
   };
 
@@ -182,27 +182,6 @@ export default function UserProfileSettings() {
           <ThemeChanger />
         </TabsContent>
       </Tabs>
-
-      {/* address */}
-
-      {/* payment */}
     </div>
   );
 }
-
-//  <div>
-// <Tabs defaultValue="theme">
-//   <TabsList className="bg-(--background) gap-2 justify-center">
-//     <h2 className="text-xl font-semibold text-(--primary)">Settings:</h2>
-//     <TabsTrigger value="account">Account</TabsTrigger>
-//     <TabsTrigger value="theme">Theme</TabsTrigger>
-//   </TabsList>
-//   <Separator className="bg-(--primary) my-1" />
-//   <TabsContent value="account">Page in progress...</TabsContent>
-//   <TabsContent value="theme">
-//     {" "}
-//     <p className="text-muted-foreground">Select theme: </p>
-//     <ThemeChanger />
-//   </TabsContent>
-// </Tabs>
-//     </div>

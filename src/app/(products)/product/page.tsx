@@ -40,9 +40,9 @@ export default async function ProductPage(props: Params) {
 
   return (
     <section className="px-2">
-      <h1 className="text-2xl font-bold mb-4">Produkty</h1>
+      <h1 className="text-2xl font-bold mb-4">Products</h1>
       <p className="mb-4 text-sm text-gray-500">
-        Znaleziono {total} produktów. Strona {currentPage} z {totalPages}
+        Find {total} products. Page {currentPage} from {totalPages}
       </p>
       <ProductList products={products} />
       <PaginationPage totalPages={totalPages} />
