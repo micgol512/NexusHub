@@ -12,7 +12,21 @@ export async function GET() {
     where: { userId: session.user.id },
   });
 
-  return NextResponse.json(payment || {});
+  if (!payment) return NextResponse.json({});
+
+  let parsedDetails = payment.details;
+  if (typeof parsedDetails === "string") {
+    try {
+      parsedDetails = JSON.parse(parsedDetails);
+    } catch {
+      parsedDetails = {};
+    }
+  }
+
+  return NextResponse.json({
+    ...payment,
+    details: parsedDetails,
+  });
 }
 
 export async function POST(req: Request) {
@@ -27,10 +41,15 @@ export async function POST(req: Request) {
   });
 
   if (existing) {
-    return NextResponse.json(
-      { message: "Payment method already exists" },
-      { status: 409 }
-    );
+    const updated = await prisma.paymentMethod.updateMany({
+      where: { userId: session.user.id },
+      data: {
+        method: data.method,
+        details: data.details,
+      },
+    });
+
+    return NextResponse.json(updated);
   }
 
   const payment = await prisma.paymentMethod.create({
@@ -55,7 +74,7 @@ export async function PUT(req: Request) {
     where: { userId: session.user.id },
     data: {
       method: data.method,
-      details: data.details,
+      details: JSON.stringify(data.details),
     },
   });
 

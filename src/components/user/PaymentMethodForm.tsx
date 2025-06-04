@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { notification } from "@/lib/notification";
 
 type PaymentMethodDetails = {
   provider: string;
@@ -49,25 +50,24 @@ export function PaymentMethodForm() {
 
   const handlePaymentSubmit = async () => {
     setLoading(true);
-    const res = await fetch("/api/user/payment_method", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(paymentMethod),
-    });
-
-    if (res.status === 409) {
-      await fetch("/api/user/payment_method", {
-        method: "PUT",
+    try {
+      const res = await fetch("/api/user/payment_method", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(paymentMethod),
       });
+      if (res.ok) {
+        notification("Successfull update Payment Method.", "success");
+      }
+    } catch {
+      notification("Some problem witch update card", "error");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="flex flex-col w-1/3 gap-1">
+    <div className="flex flex-col w-full gap-1">
       <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
       <Label>Type</Label>
       <select

@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { FullProduct } from "./ProductCard";
 import Image from "next/image";
 import Link from "next/link";
+import { notification } from "@/lib/notification";
 
 type ProductDetailsProps = {
   product: FullProduct;
@@ -39,15 +40,14 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
 
     if (!res.ok) {
       const error = await res.json();
-      return console.error("Błąd:", error.error);
+      return notification(`Error: ${error.error}`, "error");
     }
 
     const data = await res.json();
-    console.log("Dodano do koszyka:", data);
+    notification(`Dodano do koszyka: ${data}`, "success");
   };
 
   const handleSetImage = (url: string) => {
-    // console.log("Zmiana");
     setMainImage(url);
   };
 

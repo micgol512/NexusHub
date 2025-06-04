@@ -1,62 +1,12 @@
-"use client";
+// "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeChanger } from "@/components/shared/ThemeChanger";
 import { Separator } from "@/components/ui/separator";
-import { notification } from "@/lib/notification";
+import { AddressForm } from "@/components/user/AddressForm";
+import { PaymentMethodForm } from "@/components/user/PaymentMethodForm";
 
 export default function UserProfileSettings() {
-  const [address, setAddress] = useState({
-    country: "",
-    province: "",
-    city: "",
-    postCode: "",
-  });
-
-  const [paymentMethod, setPaymentMethod] = useState({
-    method: "CARD",
-    details: {
-      provider: "",
-      accountNumber: "",
-      expiryDate: "",
-    },
-  });
-
-  const handleAddressSubmit = async () => {
-    try {
-      await fetch("/api/user/address", {
-        method: "POST",
-        body: JSON.stringify(address),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      notification("Address saved", "success");
-    } catch {
-      notification("Failed to save address", "error");
-    }
-  };
-
-  const handlePaymentSubmit = async () => {
-    try {
-      await fetch("/api/user/payment-method", {
-        method: "POST",
-        body: JSON.stringify({
-          method: paymentMethod.method,
-          details: paymentMethod.details,
-        }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      notification("Payment method saved", "success");
-    } catch {
-      notification("Failed to save payment method", "error");
-    }
-  };
-
   return (
     <div className="space-y-12 max-w-xl">
       <Tabs defaultValue="theme">
@@ -73,106 +23,10 @@ export default function UserProfileSettings() {
               <TabsTrigger value="payment">Payment</TabsTrigger>
             </TabsList>
             <TabsContent value="address">
-              {" "}
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Address</h2>
-                <Label>Country</Label>
-                <Input
-                  value={address.country}
-                  onChange={(e) =>
-                    setAddress({ ...address, country: e.target.value })
-                  }
-                />
-                <Label>Province</Label>
-                <Input
-                  value={address.province}
-                  onChange={(e) =>
-                    setAddress({ ...address, province: e.target.value })
-                  }
-                />
-                <Label>City</Label>
-                <Input
-                  value={address.city}
-                  onChange={(e) =>
-                    setAddress({ ...address, city: e.target.value })
-                  }
-                />
-                <Label>Postal Code</Label>
-                <Input
-                  value={address.postCode}
-                  onChange={(e) =>
-                    setAddress({ ...address, postCode: e.target.value })
-                  }
-                />
-                <Button className="mt-4" onClick={handleAddressSubmit}>
-                  Save Address
-                </Button>
-              </div>
+              <AddressForm />
             </TabsContent>
             <TabsContent value="payment">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-                <Label>Type</Label>
-                <select
-                  className="w-full border px-2 py-2 rounded-md"
-                  value={paymentMethod.method}
-                  onChange={(e) =>
-                    setPaymentMethod({
-                      ...paymentMethod,
-                      method: e.target.value,
-                    })
-                  }
-                >
-                  <option value="CARD">Card</option>
-                  <option value="PAYPAL">PayPal</option>
-                  <option value="GOOGLEPAY">Google Pay</option>
-                  <option value="APPLEPAY">Apple Pay</option>
-                </select>
-
-                <Label className="mt-2">Provider</Label>
-                <Input
-                  value={paymentMethod.details.provider}
-                  onChange={(e) =>
-                    setPaymentMethod({
-                      ...paymentMethod,
-                      details: {
-                        ...paymentMethod.details,
-                        provider: e.target.value,
-                      },
-                    })
-                  }
-                />
-                <Label>Account/Card Number</Label>
-                <Input
-                  value={paymentMethod.details.accountNumber}
-                  onChange={(e) =>
-                    setPaymentMethod({
-                      ...paymentMethod,
-                      details: {
-                        ...paymentMethod.details,
-                        accountNumber: e.target.value,
-                      },
-                    })
-                  }
-                />
-                <Label>Expiry Date</Label>
-                <Input
-                  type="month"
-                  value={paymentMethod.details.expiryDate}
-                  onChange={(e) =>
-                    setPaymentMethod({
-                      ...paymentMethod,
-                      details: {
-                        ...paymentMethod.details,
-                        expiryDate: e.target.value,
-                      },
-                    })
-                  }
-                />
-                <Button className="mt-4" onClick={handlePaymentSubmit}>
-                  Save Payment Method
-                </Button>
-              </div>
+              <PaymentMethodForm />
             </TabsContent>
           </Tabs>
         </TabsContent>

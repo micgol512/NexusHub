@@ -7,7 +7,6 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const address = await prisma.address.findFirst({
     where: { userId: session.user.id },
   });
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
 
   if (existing) {
     return NextResponse.json(
-      { message: "Address already exists" },
+      { message: "Address already exists." },
       { status: 409 }
     );
   }

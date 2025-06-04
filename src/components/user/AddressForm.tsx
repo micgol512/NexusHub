@@ -52,7 +52,7 @@ export function AddressForm() {
   };
 
   return (
-    <div className="flex flex-col w-1/3 gap-1">
+    <div className="flex flex-col w-full gap-1">
       <h2 className="text-xl font-semibold mb-4">Address</h2>
       <Label htmlFor="in-country">Country</Label>
       <Input

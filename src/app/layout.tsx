@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "@/components/context/SessionProvider";
 import { ToasterProvider } from "@/components/context/ToastProvider";
+import SessionChecker from "@/components/shared/SessionChecker";
 export const metadata: Metadata = {
   title: "CyberTech",
   description: "Furutistic platform for customers and sellers",
@@ -30,6 +31,7 @@ export default function RootLayout({
       >
         <body className="min-h-screen flex flex-col bg-(--background) text-(--foreground) items-center justify-center gap-0">
           <SessionProvider>
+            <SessionChecker />
             <Header />
             <ToasterProvider />
             <main className="w-full max-w-[1920px] flex flex-col flex-1 justify-start p-0 py-0 ">
