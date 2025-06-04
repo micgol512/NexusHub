@@ -15,6 +15,7 @@ import { ShoppingCart, Star } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
+import { notification } from "@/lib/notification";
 
 export type FullProduct = Product & {
   category: Category;
@@ -47,9 +48,9 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         throw new Error("Failed to add to Cart");
       }
 
-      console.log("Add to cart!");
-    } catch (error) {
-      console.error("Error with adding to cart:", error);
+      notification("Add to cart!", "success");
+    } catch {
+      notification("Error with adding to cart.", "error");
     }
   };
 

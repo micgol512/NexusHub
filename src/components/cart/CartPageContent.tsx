@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
+import { toast } from "sonner";
+import { notification } from "@/lib/notification";
 
 export default function CartPageContent() {
   const [items, setItems] = useState<CartItemWithProductImage[]>([]);
@@ -51,10 +53,23 @@ export default function CartPageContent() {
       setSelectedIds(items.map((i) => i.id));
     }
   };
+
   const handleItemDelete = (deletedCartId: number) => {
     setItems((prev) => prev.filter((item) => item.id !== deletedCartId));
     setSelectedIds((prev) => prev.filter((id) => id !== deletedCartId));
+    toast.error("Deleted from cart.");
   };
+
+  const handleQuantityChange = (cartId: number, newQuantity: number) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === cartId
+          ? { ...item, quantity: Math.max(1, newQuantity) }
+          : item
+      )
+    );
+  };
+
   const handleCheckout = async () => {
     try {
       const res = await Promise.all(
@@ -65,6 +80,7 @@ export default function CartPageContent() {
             body: JSON.stringify({
               cartItemID: item.cartId,
               productId: item.product.id,
+              quantity: item.quantity,
               selected: selectedIds.includes(item.id),
             }),
           })
@@ -74,11 +90,10 @@ export default function CartPageContent() {
       if (res.every((r) => r.ok)) {
         router.push("/order");
       } else {
-        alert("Some issues with update cart...");
+        notification("Some issues with update cart...", "error");
       }
-    } catch (error) {
-      console.error("Checkout error:", error);
-      alert("Error during checkout.");
+    } catch {
+      notification("Error during checkout.", "error");
     }
   };
 
@@ -131,6 +146,9 @@ export default function CartPageContent() {
             checked={selectedIds.includes(item.id)}
             onToggleSelected={() => handleToggleSelected(item.id)}
             onDelete={() => handleItemDelete(item.id)}
+            onQuantityChange={(newQuantity) =>
+              handleQuantityChange(item.id, newQuantity)
+            }
           />
         ))}
       </div>

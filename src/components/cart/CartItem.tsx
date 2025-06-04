@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
+import { notification } from "@/lib/notification";
 
 export type CartItemWithProductImage = CartItem & {
   product: Product & {
@@ -15,11 +16,13 @@ export default function CartItem({
   checked,
   onToggleSelected,
   onDelete,
+  onQuantityChange,
 }: {
   item: CartItemWithProductImage;
   checked: boolean;
   onToggleSelected: () => void;
   onDelete: () => void;
+  onQuantityChange: (newQuantity: number) => void;
 }) {
   const handleDelete = async () => {
     try {
@@ -37,12 +40,22 @@ export default function CartItem({
       if (!res.ok) {
         throw new Error(data.error || "Something went wrong");
       }
-      console.log("USUNIETO z koszyka");
+      notification("Deleted from cart", "warning");
       onDelete();
-    } catch (err) {
-      console.error("Błąd przy usuwaniu z koszyka:", err);
+    } catch {
+      notification("Some issues from deleteing.", "error");
     }
   };
+  const handleIncrease = () => {
+    onQuantityChange(item.quantity + 1);
+  };
+
+  const handleDecrease = () => {
+    if (item.quantity > 1) {
+      onQuantityChange(item.quantity - 1);
+    }
+  };
+
   return (
     <div className="flex border rounded-lg p-4 gap-4">
       <Checkbox checked={checked} onCheckedChange={onToggleSelected} />
@@ -75,9 +88,13 @@ export default function CartItem({
         </Button>
 
         <div className="flex items-center border rounded px-2 py-1 gap-2">
-          <button onClick={() => console.log("handler -1")}>-</button>
+          <Button variant={"icon"} onClick={handleDecrease}>
+            -
+          </Button>
           <span>{item.quantity}</span>
-          <button onClick={() => console.log("handler +1")}>+</button>
+          <Button variant={"icon"} onClick={handleIncrease}>
+            +
+          </Button>
         </div>
       </div>
     </div>

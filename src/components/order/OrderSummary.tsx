@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CartItemWithProductImage } from "../cart/CartItem";
 import { useRouter } from "next/navigation";
+import { notification } from "@/lib/notification";
 
 export const OrderSummary = ({
   cartItems,
@@ -45,13 +46,13 @@ export const OrderSummary = ({
       );
       const req = await fetch("/api/order", { method: "POST" });
       if (req.ok) {
+        notification("Succesfull create order.", "success");
         router.push("/user/transactions");
       } else {
-        alert("Something went wrong...");
+        notification("Something went wrong...", "error");
       }
-    } catch (error) {
-      console.error("Order error:", error);
-      alert("Error during order.");
+    } catch {
+      notification("Error during order.", "error");
     }
   };
 

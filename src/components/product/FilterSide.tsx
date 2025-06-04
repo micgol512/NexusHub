@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Minus, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Category } from "@/generated/prisma";
 
@@ -64,6 +64,10 @@ export default function FilterSide() {
   const [maxPrice, setMaxPrice] = useState("");
   const [showAllCategories, setShowAllCategories] = useState(false);
 
+  const visibleCategories = showAllCategories
+    ? ["All", ...categories]
+    : ["All", ...categories.slice(0, 5)];
+
   useEffect(() => {
     const categoriesFromParams = searchParams.getAll("category");
     const ratingsFromParams = searchParams.getAll("rating");
@@ -112,20 +116,6 @@ export default function FilterSide() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const hiddenCategories = categories.slice(5);
-  const visibleCategories = (() => {
-    const base = showAllCategories
-      ? [...hiddenCategories, ...categories.slice(0, 5)]
-      : categories.slice(0, 5);
-
-    const sorted = [...base].sort((a, b) => {
-      const aSelected = categoryFilter.selected.includes(a);
-      const bSelected = categoryFilter.selected.includes(b);
-      return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
-    });
-
-    return ["All", ...sorted];
-  })();
   if (categories.length === 0) {
     return <div>Loading filters...</div>;
   }
@@ -163,19 +153,10 @@ export default function FilterSide() {
             {categories.length > 5 && !showAllCategories && (
               <Button
                 variant="link"
-                className="text-(--foreground) text-[16px] font-[500] leading-[26px]  p-0 m-0"
+                className="text-(--foreground) text-[16px] font-[500] leading-[26px] p-0 m-0"
                 onClick={() => setShowAllCategories(true)}
               >
                 Load More <Plus />
-              </Button>
-            )}
-            {showAllCategories && (
-              <Button
-                variant="link"
-                className="text-(--foreground) text-[16px] font-[500] leading-[26px]  p-0 m-0"
-                onClick={() => setShowAllCategories(false)}
-              >
-                Show Less <Minus />
               </Button>
             )}
           </AccordionContent>
