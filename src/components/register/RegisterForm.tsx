@@ -27,6 +27,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Logo } from "../shared/Logo";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z
   .object({
@@ -54,6 +55,7 @@ const FormSchema = z
 type FormValues = z.infer<typeof FormSchema>;
 
 export function RegisterForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -62,6 +64,7 @@ export function RegisterForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -80,6 +83,7 @@ export function RegisterForm() {
       setErrorMessage(result.error || "Something went wrong.");
     } else {
       setSuccessMessage("Account created successfully!");
+      router.push("/register/success");
     }
   };
 
@@ -135,7 +139,7 @@ export function RegisterForm() {
                       variant="icon"
                       size="icon"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-0 top-[12px] h-full"
+                      className="absolute right-0 top-[24px]"
                     >
                       {showPassword ? <Eye /> : <EyeOff />}
                     </Button>
@@ -151,7 +155,7 @@ export function RegisterForm() {
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"}
                         {...field}
                       />
                     </FormControl>
@@ -159,10 +163,10 @@ export function RegisterForm() {
                       type="button"
                       variant="icon"
                       size="icon"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute right-0 top-[12px] h-full"
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      className="absolute right-0 top-[24px]"
                     >
-                      {showPassword ? <Eye /> : <EyeOff />}
+                      {showConfirmPassword ? <Eye /> : <EyeOff />}
                     </Button>
                     <FormMessage />
                   </FormItem>
@@ -198,25 +202,33 @@ export function RegisterForm() {
                 control={form.control}
                 name="terms"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="h-[24px] w-[24px]"
-                      />
-                    </FormControl>
-                    <FormLabel className="text-sm font-normal leading-5 ">
-                      By creating an account, you agree to the
-                      <Link href="/deletion" className="underline text-primary">
-                        Conditions of Use
-                      </Link>{" "}
-                      and{" "}
-                      <Link href="/privacy" className="underline text-primary">
-                        Privacy Notice
-                      </Link>
-                      .
-                    </FormLabel>
+                  <FormItem className="flex flex-col w-full">
+                    <div className="flex flex-row items-center gap-2 w-full">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="h-[24px] w-[24px]"
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-normal leading-5 inline break-words w-max">
+                        {"By creating an account, you agree to the "}
+                        <Link
+                          href="#"
+                          className="underline text-primary inline"
+                        >
+                          Conditions of Use
+                        </Link>
+                        {"  and "}
+                        <Link
+                          href="/privacy"
+                          className="underline text-primary inline"
+                        >
+                          Privacy Notice
+                        </Link>
+                        {"."}
+                      </FormLabel>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

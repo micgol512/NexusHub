@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { ShoppingCart, Star } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button";
+import { Progress } from "../ui/progress";
+import { notification } from "@/lib/notification";
 
 export type FullProduct = Product & {
   category: Category;
@@ -32,7 +34,11 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
     try {
       const res = await fetch("/api/cart", {
         method: "POST",
-        body: JSON.stringify({ productId, quantity: 1 }),
+        body: JSON.stringify({
+          productId,
+          quantity: 1,
+          selectedColor: product.colors[0].hash,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,31 +48,24 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         throw new Error("Failed to add to Cart");
       }
 
-      console.log("Add to cart!");
-    } catch (error) {
-      console.error("Error with adding to cart:", error);
+      notification("Add to cart!", "success");
+    } catch {
+      notification("Error with adding to cart.", "error");
     }
   };
 
   return (
     <Card
-      className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105"
+      className="w-[300px] h-[532px] m-4 p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out hover:scale-105 hover:not:scale-50"
       onClick={() => handleClick(product.id.toString())}
-      //   style={{
-      //     backgroundColor: product.colors[0]?.hash || undefined,
-      //   }}
     >
-      {/* <CardTitle>
-        {product.name} ({product.brand.name})
-        {product.discountPrice && `(${product.discountPrice})`}
-      </CardTitle> */}
       <CardContent className="relative flex flex-col gap-[18px]">
         <Image
           src={`${product.images[0].url}`}
           width={100}
           height={100}
           alt={product.name}
-          className="max-h-[204px] bg-(--muted) rounded-(--radius) self-center"
+          className="h-[204px] w-max bg-(--muted) rounded-(--radius) self-center"
         />
         <div className="w-min bg-(--category-bg) text-(--category-fg) px-[10px] py-[4px] rounded-(--radius)">
           {product.category.name}
@@ -83,23 +82,28 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
             {product.price}
           </p>
         </div>
-        <div className="flex flex-row ">
-          <Star color="var(--primary)" fill="var(--primary)" />{" "}
-          <p>
-            {product.rating?.fiveStar ? "Są oceny i obliczenia" : "(5)"}
-            {"/5.0"}
-          </p>
-          <Separator orientation="vertical" className="my-2" />
-          <p>
-            {product.sold}
-            {" sold"}
-          </p>
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row">
+            <Star color="var(--primary)" fill="var(--primary)" />{" "}
+            <p>
+              {product?.rating ? "Calculating..." : "(5)"}
+              {" / 5.0"}
+            </p>
+          </div>
+
+          <Separator orientation="vertical" className="mx-2 border-1 my-1" />
+          {product?.sold && (
+            <p className="justify-self-end self-end place-self-end">
+              {product.sold}
+              {" sold"}
+            </p>
+          )}
         </div>
-        <div>ProgresBar</div>
-        <div>info sztuk sprzedanych z ilości</div>
+        <Progress value={product.sold} max={product.stock} />
+        <div>{`${product.sold} / ${product.stock + product.sold}`}</div>
         <Button
-          variant={"ghost"}
-          className="absolute left-[10px] top-[10px]"
+          variant={"icon"}
+          className="absolute left-[10px] top-[10px] hover:scale-110"
           onClick={(e) => {
             e.stopPropagation();
             handleAddToCart(product.id);
@@ -107,6 +111,16 @@ const ProductCard = ({ product }: { product: FullProduct }) => {
         >
           <ShoppingCart size={48} />
         </Button>
+        {/* <Button
+          variant={"icon"}
+          className="absolute right-[10px] top-[10px] hover:scale-110"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddToCart(product.id);
+          }}
+        >
+          <Heart size={48} fill="red" color="red" />
+        </Button> */}
       </CardContent>
     </Card>
   );

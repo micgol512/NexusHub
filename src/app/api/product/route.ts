@@ -7,7 +7,7 @@ export const GET = async (request: NextRequest) => {
 
   const categories = searchParams.getAll("category");
   const brands = searchParams.getAll("brand");
-  const colors = searchParams.getAll("color"); // Propably for delete
+  const colors = searchParams.getAll("color");
   const minPrice = Number(searchParams.get("min")) || 0;
   const maxPrice = Number(searchParams.get("max")) || 10000;
   const sort = searchParams.get("sortBy") || "createdAt_desc";

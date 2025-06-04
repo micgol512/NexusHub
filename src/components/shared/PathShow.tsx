@@ -53,21 +53,20 @@ export const PathShow = () => {
         {pathSegments.map((segment, index) => {
           const isLast = index === pathSegments.length - 1;
           if (pathSegments[0] === "product" && pathSegments[1])
-            console.log("trururur");
-          // pathSegments[1] = dynamicName || "Product ID";
+            // pathSegments[1] = dynamicName || "Product ID";
 
-          return (
-            <BreadcrumbItem key={index}>
-              <BreadcrumbSeparator />
-              {isLast ? (
-                <span>{`${formatSegment(segment)}`}</span>
-              ) : (
-                <BreadcrumbLink href={buildPath(index)}>
-                  {dynamicName ? dynamicName : `${formatSegment(segment)}`}
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-          );
+            return (
+              <BreadcrumbItem key={index}>
+                <BreadcrumbSeparator />
+                {isLast ? (
+                  <span>{`${formatSegment(segment)}`}</span>
+                ) : (
+                  <BreadcrumbLink href={buildPath(index)}>
+                    {dynamicName ? dynamicName : `${formatSegment(segment)}`}
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            );
         })}
       </BreadcrumbList>
     </Breadcrumb>

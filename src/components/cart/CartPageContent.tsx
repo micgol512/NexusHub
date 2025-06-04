@@ -3,49 +3,161 @@
 import { useEffect, useState } from "react";
 import CartItem, { CartItemWithProductImage } from "./CartItem";
 import CartSummary from "./CartSummary";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
+import { toast } from "sonner";
+import { notification } from "@/lib/notification";
 
 export default function CartPageContent() {
   const [items, setItems] = useState<CartItemWithProductImage[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCart = async () => {
       const res = await fetch("/api/cart");
       if (res.ok) {
         const data = await res.json();
-        setItems(data.cart?.items || []);
+        const fetchedItems = data.cart?.items || [];
+        setItems(fetchedItems);
+
+        const initiallySelected = fetchedItems
+          .filter((item: CartItemWithProductImage) => item.selected)
+          .map((item: CartItemWithProductImage) => item.id);
+
+        setSelectedIds(initiallySelected);
       }
       setLoading(false);
     };
 
     fetchCart();
   }, []);
-  //REWORK reduce where selected === true
+
+  const handleToggleSelected = (cartId: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(cartId)
+        ? prev.filter((id) => id !== cartId)
+        : [...prev, cartId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === items.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(items.map((i) => i.id));
+    }
+  };
+
+  const handleItemDelete = (deletedCartId: number) => {
+    setItems((prev) => prev.filter((item) => item.id !== deletedCartId));
+    setSelectedIds((prev) => prev.filter((id) => id !== deletedCartId));
+    toast.error("Deleted from cart.");
+  };
+
+  const handleQuantityChange = (cartId: number, newQuantity: number) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === cartId
+          ? { ...item, quantity: Math.max(1, newQuantity) }
+          : item
+      )
+    );
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const res = await Promise.all(
+        items.map((item) =>
+          fetch("/api/cart", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              cartItemID: item.cartId,
+              productId: item.product.id,
+              quantity: item.quantity,
+              selected: selectedIds.includes(item.id),
+            }),
+          })
+        )
+      );
+
+      if (res.every((r) => r.ok)) {
+        router.push("/order");
+      } else {
+        notification("Some issues with update cart...", "error");
+      }
+    } catch {
+      notification("Error during checkout.", "error");
+    }
+  };
+
   const totalItems = items.reduce(
-    (sum, i) => (i.selected ? sum + i.quantity : sum),
+    (sum, i) => (selectedIds.includes(i.id) ? sum + i.quantity : sum),
     0
   );
 
   const totalPrice = items.reduce(
-    (sum, i) => (i.selected ? sum + i.quantity * i.product.price : sum),
+    (sum, i) =>
+      selectedIds.includes(i.id) ? sum + i.quantity * i.product.price : sum,
     0
   );
 
   if (loading) return <div>Loading cart...</div>;
-
+  if (items.length === 0)
+    return (
+      <div>
+        {" Cart empty. Go to "}
+        <Link
+          href={"/product"}
+          className={cn(
+            buttonVariants({
+              variant: "link",
+            }),
+            "p-0 m-0"
+          )}
+        >
+          Products Page
+        </Link>
+        {" to add something."}
+      </div>
+    );
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="flex-1 space-y-4">
         <div className="flex items-center gap-2 text-muted-foreground">
-          <input type="checkbox" /> Select All
+          <Checkbox
+            id="check_all"
+            checked={selectedIds.length === items.length}
+            onCheckedChange={handleSelectAll}
+          />
+          <Label htmlFor="check_all">Select All</Label>
         </div>
 
         {items.map((item) => (
-          <CartItem key={item.id} item={item} />
+          <CartItem
+            key={item.id}
+            item={item}
+            checked={selectedIds.includes(item.id)}
+            onToggleSelected={() => handleToggleSelected(item.id)}
+            onDelete={() => handleItemDelete(item.id)}
+            onQuantityChange={(newQuantity) =>
+              handleQuantityChange(item.id, newQuantity)
+            }
+          />
         ))}
       </div>
 
-      <CartSummary totalItems={totalItems} totalPrice={totalPrice} />
+      <CartSummary
+        totalItems={totalItems}
+        totalPrice={totalPrice}
+        onCheckout={handleCheckout}
+      />
     </div>
   );
 }

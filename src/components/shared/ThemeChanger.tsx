@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -5,29 +8,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-const themeChange = (value: string) => {
-  console.log(value);
-  if (value === "light") {
-    document.documentElement.classList.remove("dark");
-  } else if (value === "dark") {
-    document.documentElement.classList.add("dark");
-  } else if (value === "system") {
-    document.documentElement.classList.remove("dark");
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark");
-    }
-  }
-};
+import { useTheme } from "next-themes";
+
+const themes = ["light", "dark", "silver", "olive", "system"];
+
 export const ThemeChanger = () => {
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (!theme) return;
+
+    const html = document.documentElement;
+
+    // usuń wszystkie istniejące klasy z listy motywów
+    themes.forEach((t) => html.classList.remove(t));
+
+    // dodaj nową klasę
+    html.classList.add(theme);
+  }, [theme]);
   return (
-    <Select onValueChange={(value) => themeChange(value)}>
+    <Select onValueChange={setTheme} value={theme}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Theme" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
-        <SelectItem value="system">System</SelectItem>
+        {themes.map((t) => (
+          <SelectItem key={t} value={t}>
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

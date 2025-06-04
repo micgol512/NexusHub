@@ -54,7 +54,7 @@ export default function ProductFilterBar() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-start gap-5 p-4">
         <div className="flex items-center gap-2">
           <Label className="text-[16px]">Sort By:</Label>
           <Select value={sortBy} onValueChange={handleSortChange}>

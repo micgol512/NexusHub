@@ -33,18 +33,33 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { productId, quantity } = await req.json();
+  const { productId, quantity, selectedColor } = await req.json();
 
-  if (!productId || typeof quantity !== "number" || quantity < 1) {
+  if (
+    !productId ||
+    typeof quantity !== "number" ||
+    quantity < 1 ||
+    !selectedColor
+  ) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
   const product = await prisma.product.findUnique({
     where: { id: productId },
+    include: {
+      colors: true,
+    },
   });
 
   if (!product) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
+  }
+
+  const isColorValid = product.colors.some(
+    (color) => color.hash === selectedColor
+  );
+  if (!isColorValid) {
+    return NextResponse.json({ error: "Invalid color" }, { status: 400 });
   }
 
   const cart = await prisma.cart.upsert({
@@ -59,6 +74,7 @@ export async function POST(req: NextRequest) {
     where: {
       cartId: cart.id,
       productId: productId,
+      color: selectedColor,
     },
   });
 
@@ -76,6 +92,7 @@ export async function POST(req: NextRequest) {
       cartId: cart.id,
       productId: productId,
       quantity: quantity,
+      color: selectedColor,
     },
   });
 
@@ -88,7 +105,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { productId } = await req.json();
+  const { productId, color } = await req.json();
 
   if (!productId) {
     return NextResponse.json(
@@ -109,6 +126,7 @@ export async function DELETE(req: NextRequest) {
     where: {
       cartId: cart.id,
       productId: productId,
+      color: color,
     },
   });
 
@@ -121,8 +139,12 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body: { productId: number; quantity?: number; selected?: boolean } =
-    await req.json();
+  const body: {
+    cartItemID: number;
+    productId: number;
+    quantity?: number;
+    selected?: boolean;
+  } = await req.json();
   const { productId, quantity, selected } = body;
 
   if (!productId || (quantity !== undefined && quantity < 1)) {
@@ -131,7 +153,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
       include: { cart: true },
     });
 

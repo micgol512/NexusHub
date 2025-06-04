@@ -2,8 +2,7 @@
 
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
@@ -14,10 +13,8 @@ export const UserLogin = () => {
   if (!session)
     return (
       <Button
-        className={cn(
-          buttonVariants({ variant: "default" }),
-          "h-[54px] w-[121px]"
-        )}
+        variant={"default"}
+        className={"h-[54px] w-[121px]"}
         onClick={() => signIn()}
       >
         SIGN IN
@@ -34,7 +31,11 @@ export const UserLogin = () => {
       <Link href="/user">
         <Avatar>
           <AvatarImage src={userImage} />
-          <AvatarFallback>Name</AvatarFallback>
+          <AvatarFallback>
+            {(session?.user?.name ? session?.user?.name : session?.user?.email)
+              .slice(0, 2)
+              .toUpperCase()}
+          </AvatarFallback>
         </Avatar>
       </Link>
     </div>
@@ -42,13 +43,3 @@ export const UserLogin = () => {
 };
 
 export default UserLogin;
-
-//  <Link
-//         href={`/login`}
-//         className={cn(
-//           buttonVariants({ variant: "default" }),
-//           "h-[54px] w-[121px]"
-//         )}
-//       >
-//         SING IN
-//       </Link>
